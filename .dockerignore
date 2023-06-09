@@ -1,0 +1,4 @@
+datasets-yolo/*
+test/*
+tmp/*
+*.pt
