@@ -1,11 +1,10 @@
 import os
 import shutil
 from src.data.converter.coco2yolo import Coco2Yolo
-from src.data.downloader.method.cvat import CVATHTTPDownloader
+from src.data.downloader.method.cvat import CVATHTTPDownloaderV1
 from src.schema.coco import Coco as CocoSchema
 from src.data.setup import setup_dataset
 from src.utils.general import read_json
-import src.env
 
 class DataHandler:
     def __init__(self, args_data):
@@ -44,7 +43,7 @@ class DataHandler:
         task_id_train = self.config["cvat"]["task_ids_train"]
         task_id_test = self.config["cvat"]["task_ids_test"]
 
-        cvat_http = CVATHTTPDownloader()
+        cvat_http = CVATHTTPDownloaderV1()
         ls_path_dir_projects = cvat_http.get_local_dataset_coco(
             task_ids=task_id_train,
             annotations_only=False

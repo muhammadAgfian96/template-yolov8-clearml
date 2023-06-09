@@ -3,7 +3,6 @@ import yaml
 from yaml.loader import SafeLoader
 from clearml import Task, OutputModel
 from rich import print
-import src.env
 
 
 def export_handler(yolo, task_yolo, dataset_folder, args_export, args_training, args_task):
