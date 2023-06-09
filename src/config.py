@@ -36,12 +36,12 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8s"
+    "model_name": "yolov8s-seg"
 }
 
 args_data = {
     "cvat": {
-        "task_ids_train": [69, 84, 49, 72],
+        "task_ids_train": [69, 84, 72, 218],
         "task_ids_test": [71, 74],
     },
     "label_studio": {
@@ -58,10 +58,10 @@ args_data = {
 
 
 args_train = {
-    "epochs": 15,              # number of epochs to train for
+    "epochs": 100,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": 4,                # number of images per batch (-1 for AutoBatch)
-    "imgsz": 512,               # size of input images as integer or w,h
+    "batch": 16,                # number of images per batch (-1 for AutoBatch)
+    "imgsz": 640,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
     "cache": False,             # True/ram, disk or False. Use cache for data loading
@@ -104,16 +104,16 @@ args_train = {
 }
 
 args_val = {
-    "batch": 4,            # number of images per batch (-1 for AutoBatch)
-    "save_json": True,     # save results to JSON file
+    "batch": 16,            # number of images per batch (-1 for AutoBatch)
+    "save_json": False,     # save results to JSON file
     "save_hybrid": False,   # save hybrid version of labels (labels + additional predictions)
-    "conf": 0.001,          # object confidence threshold for detection
+    "conf": 0.5,          # object confidence threshold for detection
     "iou": 0.6,             # intersection over union (IoU) threshold for NMS
-    "max_det": 1000,        # maximum number of detections per image
+    "max_det": 100,        # maximum number of detections per image
     "half": True,           # use half precision (FP16)
-    # "device": ,         # device to run on, i.e. cuda device=0/1/2/3 or device=cpu
+    "device": 0,         # device to run on, i.e. cuda device=0/1/2/3 or device=cpu
     "dnn": False,           # use OpenCV DNN for ONNX inference
-    "plots": False,         # show plots during training
+    "plots": True,         # show plots during training
     "rect": False,          # rectangular val with each batch collated for minimum padding
     "split": "val",         # dataset split to use for validation, i.e. 'val', 'test' or 'train'
 }

@@ -37,7 +37,7 @@ Task.current_task().set_script(
 )
 
 Task.current_task().set_base_docker(
-    docker_image="pytorch/pytorch:latest",
+    docker_image="python:3.10.11-slim",
     docker_arguments=["--ipc=host", "--gpus all"],
     docker_setup_bash_script=[
         "apt install --no-install-recommends -y gcc git zip curl htop libgl1-mesa-glx libglib2.0-0 libpython3-dev gnupg"
@@ -51,6 +51,8 @@ Task.current_task().connect(args_augment, name="3. Augment")
 Task.current_task().connect(args_train, name="4. Training")
 Task.current_task().connect(args_val, name="5. Testing")
 Task.current_task().connect(args_export, name="6. Export")
+
+Task.current_task().execute_remotely()
 
 # Merge all args
 args_train.update(args_logging)
@@ -82,7 +84,6 @@ Task.current_task().set_model_label_enumeration(
 )
 print("datadotyaml", datadotyaml)
 
-
 model_yolo = YOLO(model=model_name)
 
 print("Override Callbacks")
@@ -93,8 +94,10 @@ for event, func in callbacks.items():
 
 args_val["imgsz"] = args_train["imgsz"]
 model_yolo.train(data=data_yaml_file, **args_train)
-# cleanup_cache(dataset_folder)
-model_yolo.val()
+cleanup_cache(dataset_folder)
+if datadotyaml.get('test'):
+    args_val["split"] = "test"
+model_yolo.val(data=data_yaml_file, **args_val)
 
 export_handler(
     yolo=model_yolo,
