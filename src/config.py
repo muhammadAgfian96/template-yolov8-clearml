@@ -36,13 +36,13 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8s-seg"
+    "model_name": "yolov8s"
 }
 
 args_data = {
     "cvat": {
-        "task_ids_train": [5],
-        "task_ids_test": None,
+        "task_ids_train": [69, 84, 49, 72],
+        "task_ids_test": [71, 74],
     },
     "label_studio": {
         "project_id_train": None,
@@ -58,7 +58,7 @@ args_data = {
 
 
 args_train = {
-    "epochs": 5,              # number of epochs to train for
+    "epochs": 15,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
     "batch": 4,                # number of images per batch (-1 for AutoBatch)
     "imgsz": 512,               # size of input images as integer or w,h

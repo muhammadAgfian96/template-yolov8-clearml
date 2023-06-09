@@ -1,6 +1,4 @@
-import json
 import os
-import shutil
 import ultralytics
 from ultralytics import YOLO
 from clearml import Task
@@ -30,11 +28,12 @@ task = Task.init(
     # tags=['template-v2.0', 'debug'],
     auto_connect_frameworks={"pytorch": False, "matplotlib": False},
 )
+
 Task.current_task().set_script(
-    repository="",
-    branch="feat/datahandler",
+    repository="https://github.com/Binsho-Solutions/template-yolov8.git",
+    branch="main",
     working_dir=".",
-    entry_point="src/training.py",
+    entry_point="src/train.py",
 )
 
 Task.current_task().set_base_docker(

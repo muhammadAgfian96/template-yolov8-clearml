@@ -6,7 +6,7 @@
 # management
 # ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@5560391dd94556f0f9aaefbdf1bf8b887b8bd0a2
 # ultralytics==8.0.114
-ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@feat/disable-#egg=ultralytics
+ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@feat/disable-callbacks#egg=ultralytics
 clearml==1.11.0
 
 # images

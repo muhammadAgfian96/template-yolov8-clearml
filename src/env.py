@@ -1,3 +1,14 @@
-from dotenv import load_dotenv
+import os
 
-load_dotenv('./src/.env')
+
+# if os.getenv("CLEARML_ENV") != "BINSHO":
+#     raise Exception("check your env")
+
+CVAT_SERVER_USERNAME = os.getenv("CVAT_SERVER_1ST_USERNAME")
+CVAT_SERVER_PASSWORD = os.getenv("CVAT_SERVER_1ST_PASSWORD")
+CVAT_SERVER_ORGANIZATION = os.getenv("CVAT_SERVER_1ST_ORGANIZATION")
+CVAT_SERVER_FORMAT_DATA = os.getenv("CVAT_SERVER_1ST_FORMAT_DATA")
+CVAT_SERVER_HOST = os.getenv("CVAT_SERVER_1ST_HOST")
+CVAT_SERVER_OUTPUT_DIR = os.getenv("CVAT_SERVER_1ST_OUTPUT_DIR")
+
+TMP_DIR_CVAT = "./tmp-cvat"
