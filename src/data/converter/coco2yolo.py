@@ -176,12 +176,16 @@ class Coco2Yolo:
                 # images
                 src_img_file = os.path.join(root, filename)
                 dest_img_file = os.path.join(self.out_img_dir, new_filename_img)
-                shutil.copy2(src_img_file, dest_img_file)
 
                 # labels
                 src_lbl_file = os.path.join(self.src_lbl_yolo, filename_only+'.txt')
                 dest_lbl_file = os.path.join(self.out_lbl_dir, new_filename_lbl)
-                shutil.copy2(src_lbl_file, dest_lbl_file)
+                
+                if os.path.exists(src_lbl_file):
+                    shutil.copy2(src_img_file, dest_img_file)
+                    shutil.copy2(src_lbl_file, dest_lbl_file)
+                else:
+                    print(new_filename_wo_ext, "no annotations")
 
     def convert(self, use_segments:bool):
         print("Start Converting COCO to YOLO")
