@@ -11,31 +11,31 @@ def export_handler(yolo, task_yolo, dataset_folder, args_export, args_training, 
     with open(os.path.join(dataset_folder, "data.yaml"), "r") as f:
         data_yaml = yaml.load(f, Loader=SafeLoader)
 
-    for format, is_use in args_export.items():
+    for format, is_use in args_export["format"].items():
+
         try:
             if not is_use:
                 continue
-            
+            print(f"Exporting {format.upper()}...")
             if format == "engine":
                 import torch
 
                 print("torch.cuda.is_available():", torch.cuda.is_available())
-                path_model = yolo.export(format=format, device=0)
+                path_model = yolo.export(format=format, imgsz=args_training["imgsz"], device=0, **args_export["params"], )
             else:
-                path_model = yolo.export(format=format)
+                path_model = yolo.export(format=format, imgsz=args_training["imgsz"], **args_export["params"])
             print(path_model)
             output_model_last = OutputModel(
                 task=Task.current_task(),
                 name=format + "-" + args_task["model_name"],
                 comment=str(data_yaml["names"]),
+                label_enumeration={lbl: idx for idx, lbl in enumerate(data_yaml["names"])},
+
             )
             output_model_last.update_weights(
                 weights_filename=path_model, 
-                target_filename=args_task["model_name"]+"."+format, 
+                target_filename=format+"-"+args_task["model_name"]+"."+format, 
                 auto_delete_file=False
-            )
-            output_model_last.update_labels(
-                {lbl: idx for idx, lbl in enumerate(data_yaml["names"])}
             )
 
             output_model_last.update_design(

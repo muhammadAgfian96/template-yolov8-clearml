@@ -93,6 +93,7 @@ for event, func in callbacks.items():
 
 args_val["imgsz"] = args_train["imgsz"]
 model_yolo.train(data=data_yaml_file, **args_train)
+
 cleanup_cache(dataset_folder)
 if datadotyaml.get('test'):
     args_val["split"] = "test"

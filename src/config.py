@@ -17,17 +17,30 @@ args_augment = {
 }
 
 args_export = {
-    "torchscript": 1,  # TorchScript
-    "onnx": 1,  # ONNX
-    "openvino": 0,  # OpenVINO
-    "engine": 0,  # TensorRT
-    "coreml": 0,  # CoreML
-    "saved_model": 0,  # TensorFlow SavedModel
-    "pb": 0,  # TensorFlow GraphDef
-    "tflite": 0,  # TensorFlow Lite
-    "edgetpu": 0,  # TensorFlow Edge TPU
-    "tfjs": 0,  # TensorFlow.js
-    "paddle": 0,  # PaddlePaddle
+    "format": {
+        "torchscript": 1,  # TorchScript
+        "onnx": 1,  # ONNX
+        "openvino": 0,  # OpenVINO
+        "engine": 0,  # TensorRT
+        "coreml": 0,  # CoreML
+        "saved_model": 0,  # TensorFlow SavedModel
+        "pb": 0,  # TensorFlow GraphDef
+        "tflite": 0,  # TensorFlow Lite
+        "edgetpu": 0,  # TensorFlow Edge TPU
+        "tfjs": 0,  # TensorFlow.js
+        "paddle": 0,  # PaddlePaddle
+    },
+    "params": {
+        "keras": False,
+        "optimize": False,
+        "half": True,
+        "int8": False,
+        "dynamic": False,
+        "simplify": False,
+        "opset": None,
+        "workspace": 4,
+        "nms": False
+    }
 }
 
 args_logging = {
@@ -59,9 +72,9 @@ args_data = {
 
 args_train = {
     "augment": True,            
-    "epochs": 100,              # number of epochs to train for
+    "epochs": 10,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": -1,                # number of images per batch (-1 for AutoBatch)
+    "batch": 16,                # number of images per batch (-1 for AutoBatch)
     "imgsz": 640,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
