@@ -52,7 +52,9 @@ Task.current_task().connect(args_train, name="4_Training")
 Task.current_task().connect(args_val, name="5_Testing")
 Task.current_task().connect(args_export, name="6_Export")
 
-# Task.current_task().execute_remotely()
+tags = ['template-v2.1', 'debug']
+Task.current_task().set_tags(tags)
+Task.current_task().execute_remotely()
 
 # Merge all args
 args_train.update(args_logging)
@@ -72,8 +74,7 @@ if task_yolo == "classify":
 datadotyaml = yaml_loader(data_yaml_file)
 
 # Tagging
-tags = ['template-v2.0', 'debug']
-Task.current_task().set_tags(tags)
+
 Task.current_task().add_tags(task_yolo)
 Task.current_task().add_tags(os.path.basename(model_name))
 Task.current_task().add_tags(handler.source_type.upper())
