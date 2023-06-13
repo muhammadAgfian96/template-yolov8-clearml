@@ -52,9 +52,21 @@ def _log_plot(title, plot_path) -> None:
     fig = plt.figure()
     ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect='auto', xticks=[], yticks=[])  # no ticks
     ax.imshow(img)
-
+    series = ''
+    if 'confusion_matrix' in title:
+        series = title
+        title = 'Confusion Matrix'
+    if 'Mask' in title:
+        series = title
+        title = 'Mask'
+    if 'Box' in title:
+        series = title
+        title = 'Box'
+    if 'labels' in title:
+        series = title
+        title =  'Labels'
     Task.current_task().get_logger().report_matplotlib_figure(title=title,
-                                                              series='',
+                                                              series=series,
                                                               figure=fig,
                                                               report_interactive=False)
 
@@ -92,9 +104,14 @@ def on_train_epoch_end(trainer):
         if trainer.epoch == 1:
             _log_debug_samples(sorted(trainer.save_dir.glob('train_batch*.jpg')), 'Mosaic')
         """Report the current training progress."""
+        # print("trainer", trainer.metrics)
+        # print("trainer.validator.metrics",trainer.validator.metrics.results_dict)
         for k, v in trainer.validator.metrics.results_dict.items():
             task.get_logger().report_scalar('train', k, v, iteration=trainer.epoch)
 
+        for k,v in trainer.metrics.items():
+            if 'val/' in k:
+                task.get_logger().report_scalar('val/loss', k, v, iteration=trainer.epoch)
 
 def on_fit_epoch_end(trainer):
     """Reports model information to logger at the end of an epoch."""
@@ -121,11 +138,17 @@ def on_train_end(trainer):
     """Logs final model and its name on training completion."""
     task = Task.current_task()
     if task:
+        _log_debug_samples(sorted(trainer.validator.save_dir.glob('val*.jpg')), 'Validation')
         # Log final results, CM matrix + PR plots
         files = [
             'results.png', 'confusion_matrix.png', 'confusion_matrix_normalized.png',
-            *(f'{x}_curve.png' for x in ('F1', 'PR', 'P', 'R'))]
+            'labels_correlogram.jpg', 'labels.jpg',
+            *(f'{x}_curve.png' for x in (
+                'BoxF1', 'BoxPR', 'BoxP', 'BoxR',
+                'MaskF1', 'MaskPR', 'MaskP', 'MaskR',
+                ))]
         files = [(trainer.save_dir / f) for f in files if (trainer.save_dir / f).exists()]  # filter
+        
         for f in files:
             _log_plot(title=f.stem, plot_path=f)
         # Report final metrics
@@ -133,19 +156,19 @@ def on_train_end(trainer):
             task.get_logger().report_single_value(k, v)
         # Log the final model
         task.update_output_model(
-            name="pytorch best",
+            name="pytorch-best",
             model_path=str(trainer.best), 
             model_name="pytorch-best", 
             auto_delete_file=False
         )
         print(f"{str(trainer.best)}")
         # print(f"{str(trainer.last)}")
-        # task.update_output_model(
-        #     name="pytorch last",
-        #     model_path=str(trainer.last), 
-        #     model_name="pytorch-last", 
-        #     auto_delete_file=False
-        # )
+        task.update_output_model(
+            name="pytorch-last",
+            model_path=str(trainer.last), 
+            model_name="pytorch-last", 
+            auto_delete_file=False
+        )
 
 
 callbacks = {

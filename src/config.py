@@ -36,7 +36,7 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8s-seg"
+    "model_name": "yolov8m-seg"
 }
 
 args_data = {
@@ -58,9 +58,10 @@ args_data = {
 
 
 args_train = {
+    "augment": True,            
     "epochs": 100,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": 16,                # number of images per batch (-1 for AutoBatch)
+    "batch": -1,                # number of images per batch (-1 for AutoBatch)
     "imgsz": 640,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
@@ -100,7 +101,7 @@ args_train = {
     "overlap_mask": True,       # masks should overlap during training (segment train only)
     "mask_ratio": 4,            # mask downsample ratio (segment train only)
     "dropout": 0.0,             # use dropout regularization (classify train only)
-    "val": False,               # validate/test during training
+    "val": True,               # validate/test during training
 }
 
 args_val = {

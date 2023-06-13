@@ -7,7 +7,7 @@ run:
 	-it --rm --gpus all \
 	-v ${PWD}:/workspace \
 	-u $(id -u):$(id -g) \
-	-e ENABLE_DEFAULT_CLEARML_CALLBACKS=false \
+	-e ULTRALYTICS_CLEARML_DISABLED=true \
 	-e PYTHONPATH=/workspace \
 	-w /workspace \
 	-v ${PWD}/clearml.conf:/root/clearml.conf \

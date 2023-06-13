@@ -52,7 +52,7 @@ Task.current_task().connect(args_train, name="4. Training")
 Task.current_task().connect(args_val, name="5. Testing")
 Task.current_task().connect(args_export, name="6. Export")
 
-Task.current_task().execute_remotely()
+# Task.current_task().execute_remotely()
 
 # Merge all args
 args_train.update(args_logging)
@@ -88,7 +88,6 @@ model_yolo = YOLO(model=model_name)
 
 print("Override Callbacks")
 for event, func in callbacks.items():
-    print(event, func)
     model_yolo.clear_callback(event)
     model_yolo.add_callback(event, func)
 
@@ -97,7 +96,10 @@ model_yolo.train(data=data_yaml_file, **args_train)
 cleanup_cache(dataset_folder)
 if datadotyaml.get('test'):
     args_val["split"] = "test"
-model_yolo.val(data=data_yaml_file, **args_val)
+try:
+    model_yolo.val(data=data_yaml_file, **args_val)
+except Exception as e:
+    print("Error Validation", e)
 
 export_handler(
     yolo=model_yolo,
