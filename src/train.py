@@ -45,12 +45,12 @@ Task.current_task().set_base_docker(
     ],
 )
 print("ultralytics: version", ultralytics.__version__)
-Task.current_task().connect(args_task, name="1. Task")
-Task.current_task().connect(args_data, name="2. Data")
-Task.current_task().connect(args_augment, name="3. Augment")
-Task.current_task().connect(args_train, name="4. Training")
-Task.current_task().connect(args_val, name="5. Testing")
-Task.current_task().connect(args_export, name="6. Export")
+Task.current_task().connect(args_task, name="1_Task")
+Task.current_task().connect(args_data, name="2_Data")
+Task.current_task().connect(args_augment, name="3_Augment")
+Task.current_task().connect(args_train, name="4_Training")
+Task.current_task().connect(args_val, name="5_Testing")
+Task.current_task().connect(args_export, name="6_Export")
 
 # Task.current_task().execute_remotely()
 
