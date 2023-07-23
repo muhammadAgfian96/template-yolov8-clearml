@@ -5,9 +5,9 @@
 
 # management
 # ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@5560391dd94556f0f9aaefbdf1bf8b887b8bd0a2
-# ultralytics==8.0.114
-ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@disable-default-clearml#egg=ultralytics
-clearml==1.11.0
+# ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@disable-default-clearml#egg=ultralytics
+ultralytics==8.0.141
+clearml==1.12.0
 
 # images
 opencv-python>=4.1.2
