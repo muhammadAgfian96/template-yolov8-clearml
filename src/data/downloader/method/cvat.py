@@ -14,11 +14,11 @@ from rich import print
 
 class CVATHTTPDownloaderV1(BaseDownloader):
     def __init__(self):
-        __URL_CVAT = os.getenv("CVAT_SERVER_1ST_HOST")
-        __USERNAME_CVAT = os.getenv("CVAT_SERVER_1ST_USERNAME")
-        __PASSWORD_CVAT = os.getenv("CVAT_SERVER_1ST_PASSWORD")
+        __URL_CVAT = os.getenv("CVAT_HOST")
+        __USERNAME_CVAT = os.getenv("CVAT_USERNAME")
+        __PASSWORD_CVAT = os.getenv("CVAT_PASSWORD")
         __OUTPUT_DIR_TMP = os.getenv("TMP_DIR_CVAT")
-        __FORMAT_DATA = os.getenv("CVAT_SERVER_1ST_FORMAT_DATA")
+        __FORMAT_DATA = os.getenv("CVAT_FORMAT_DATA")
 
         if __URL_CVAT is None or __USERNAME_CVAT is None or __PASSWORD_CVAT is None:
             raise Exception('CVAT_HOST, CVAT_USERNAME, CVAT_PASSWORD must be set')
@@ -318,12 +318,12 @@ class CVATHTTPDownloaderV2(BaseDownloader):
 
 class CVATSDKDownloader(BaseDownloader):
     def __init__(self):
-        __URL_CVAT = os.getenv('CVAT_HOST')
-        __USERNAME_CVAT = os.getenv('CVAT_USERNAME')
-        __PASSWORD_CVAT = os.getenv('CVAT_PASSWORD')
-        __OUTPUT_DIR_TMP = os.getenv('CVAT_OUTPUT_DIR')
+        __URL_CVAT = os.getenv('CVAT_SERVER_HOST')
+        __USERNAME_CVAT = os.getenv('CVAT_SERVER_USERNAME')
+        __PASSWORD_CVAT = os.getenv('CVAT_SERVER_PASSWORD')
+        __OUTPUT_DIR_TMP = os.getenv('TMP_DIR_CVAT')
         __ORGANIZATION = os.getenv('CVAT_ORGANIZATION')
-        __FORMAT_DATA = os.getenv('CVAT_FORMAT_DATA', 'COCO 1.0')
+        __FORMAT_DATA = os.getenv('CVAT_SERVER_FORMAT_DATA', 'COCO 1.0')
 
         if __URL_CVAT is None:
             raise Exception('CVAT_HOST is not defined')

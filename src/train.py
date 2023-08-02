@@ -1,64 +1,24 @@
+import env
 import os
 import ultralytics
-from ultralytics import YOLO
+from ultralytics import YOLO, settings
+settings['clearml'] = False
+
 from clearml import Task
 from rich import print
 from src.data.setup import cleanup_cache
 from src.yolov8.exporter import export_handler
-
 from src.utils.general import get_task_yolo_name, yaml_loader, model_name_handler
-from src.config import (
-    args_augment,
-    args_export,
-    args_logging,
-    args_task,
-    args_data,
-    args_train,
-    args_val
-)
 from src.yolov8.callbacks import callbacks
 from src.yolov8.data import DataHandler
+from src.utils.clearml_utils import init_clearml, config_clearml
 
-# Task.force_requirements_env_freeze(False, os.path.join(os.getcwd(), "requirements.txt"))
-Task.add_requirements(os.path.join(os.getcwd(), "requirements.txt"))
-task = Task.init(
-    project_name="Debugging/Yolov8",
-    task_name="yolov8-train-debugging",
-    reuse_last_task_id=False,
-    # tags=['template-v2.0', 'debug'],
-    auto_connect_frameworks={"pytorch": False, "matplotlib": False},
-)
 
-Task.current_task().set_script(
-    repository="https://github.com/Binsho-Solutions/template-yolov8.git",
-    branch="main",
-    working_dir=".",
-    entry_point="src/train.py",
-)
-
-Task.current_task().set_base_docker(
-    docker_image="python:3.10.11-slim",
-    docker_arguments=["--ipc=host", "--gpus all"],
-    docker_setup_bash_script=[
-        "apt install --no-install-recommends -y gcc git zip curl htop libgl1-mesa-glx libglib2.0-0 libpython3-dev gnupg"
-        " ffmpeg libsm6 libxext6"
-    ],
-)
+task = init_clearml()
+args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 print("ultralytics: version", ultralytics.__version__)
-Task.current_task().connect(args_task, name="1_Task")
-Task.current_task().connect(args_data, name="2_Data")
-Task.current_task().connect(args_augment, name="3_Augment")
-Task.current_task().connect(args_train, name="4_Training")
-Task.current_task().connect(args_val, name="5_Testing")
-Task.current_task().connect(args_export, name="6_Export")
+# Task.current_task().execute_remotely()
 
-tags = ['template-v2.1', 'debug']
-Task.current_task().set_tags(tags)
-Task.current_task().execute_remotely()
-
-# Merge all args
-args_train.update(args_logging)
-args_train.update(args_augment)
 
 task_yolo = get_task_yolo_name(args_task["model_name"])
 model_name = model_name_handler(args_task["model_name"])
@@ -74,7 +34,6 @@ if task_yolo == "classify":
 datadotyaml = yaml_loader(data_yaml_file)
 
 # Tagging
-
 Task.current_task().add_tags(task_yolo)
 Task.current_task().add_tags(os.path.basename(model_name))
 Task.current_task().add_tags(handler.source_type.upper())
