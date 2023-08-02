@@ -1,6 +1,5 @@
 IMAGE_NAME=yolov8-custom:gpu-py3.10.11
 
-
 run:
 	docker run \
 	--ipc=host \
