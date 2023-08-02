@@ -185,7 +185,7 @@ class Coco2Yolo:
                     shutil.copy2(src_img_file, dest_img_file)
                     shutil.copy2(src_lbl_file, dest_lbl_file)
                 else:
-                    print(new_filename_wo_ext, "no annotations")
+                    print("⚠️", new_filename_wo_ext, "no annotations")
 
     def convert(self, use_segments:bool):
         print("Start Converting COCO to YOLO")
