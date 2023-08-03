@@ -82,7 +82,7 @@ class Coco2Yolo:
     
     
     @staticmethod
-    def convert_coco_to_yolo(json_path, use_segments=False, output_dir='./labels'):
+    def convert_coco_to_yolo(json_path, use_segments=False, output_dir='./labels', exclude_class=[]):
         """
         Convert coco format to yolo format.
         Args:
@@ -102,10 +102,10 @@ class Coco2Yolo:
         coco = CocoSchema(**coco_d)
 
         images = coco.get_imageid_to_image()
-        imgToAnns = coco.get_imageid_to_annotations()
+        imgToAnns = coco.get_imageid_to_annotations(exclude_class=exclude_class)
         
         # write labels in txt file
-        cat_id2name =coco.get_categoryid_to_namecat()
+        cat_id2name =coco.get_categoryid_to_namecat(exclude_class=exclude_class)
 
         for image_id, img_annotatins in tqdm(imgToAnns.items(), desc="Converting COCO to YOLO"):
             img = images[image_id]
@@ -187,13 +187,14 @@ class Coco2Yolo:
                 else:
                     print("⚠️", new_filename_wo_ext, "no annotations")
 
-    def convert(self, use_segments:bool):
+    def convert(self, use_segments:bool, exclude_class=[]):
         print("Start Converting COCO to YOLO")
         self.src_lbl_yolo = os.path.join(self.src_dir, "labels")
         list_categories = Coco2Yolo.convert_coco_to_yolo(
             json_path=self.src_lbl_filepath, 
             use_segments=use_segments,
-            output_dir=self.src_lbl_yolo
+            output_dir=self.src_lbl_yolo,
+            exclude_class=exclude_class
         )
         print("Setup Directory")
         self.__setup_directory()

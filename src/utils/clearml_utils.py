@@ -43,6 +43,9 @@ def config_clearml():
     Task.current_task().connect(args_val, name="5_Testing")
     Task.current_task().connect(args_export, name="6_Export")
 
+    ls_exclude = args_data["exclude"].replace(", ", ",").replace(" ,", ",").split(",")
+
     args_train.update(args_logging)
     args_train.update(args_augment)
+    args_data.update({"exclude":ls_exclude})
     return  args_task, args_data, args_augment, args_train, args_val, args_export

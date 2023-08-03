@@ -12,12 +12,13 @@ class DataHandler:
         self.source_type = self.__check_source()
         self.dataset_dir = os.path.join(os.getcwd(), "dataset-yolov8")
         self.dataset_test_dir = f"{self.dataset_dir}-test"
+        self.exclude_cls = self.args_data.get("exclude_cls", [])
 
     def __check_source(self):
         source_type = set()
         for source, d in self.config.items():
             print(source, d)
-            if source == "params":
+            if source == "params" or source == "exclude":
                 print("continue")
                 continue
             for k, v in d.items():
@@ -56,7 +57,7 @@ class DataHandler:
             annotation_type = coco.checking_task()
             use_segments = True if 'segmentation' in annotation_type else False
             converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_dir)
-            output_train, label_names = converter.convert(use_segments=use_segments)
+            output_train, label_names = converter.convert(use_segments=use_segments, exclude_class=self.exclude_cls)
 
         if task_id_test == [] or task_id_test is None:
             self.dataset_test_dir = None
@@ -72,10 +73,10 @@ class DataHandler:
                 annotation_type = coco.checking_task()
                 use_segments = True if 'segmentation' in annotation_type else False
                 converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_test_dir)
-                output_train, label_names = converter.convert(use_segments=use_segments)   
+                output_train, label_names = converter.convert(use_segments=use_segments, exclude_class=self.exclude_cls)   
 
 
-        
+        print("label_names:", label_names)
         setup_dataset(
             dataset_dir=self.dataset_dir,
             dataset_test=self.dataset_test_dir,

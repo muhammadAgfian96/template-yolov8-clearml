@@ -48,10 +48,13 @@ class Coco(BaseModel):
     images: List[Image]
     annotations: Optional[List[Annotation]]
 
-    def get_categoryid_to_namecat(self):
+    def get_categoryid_to_namecat(self, exclude_class:List[str]=[])->Dict[int, str]:
         categories_map = {}
+        exclude_class  = [lbl.lower() for lbl in exclude_class]
+        print("WE EXCLUDE CLASS:", exclude_class)
         for cat in self.categories:
-            categories_map[cat.id] = cat.name
+            if cat.name not in exclude_class:
+                categories_map[cat.id] = cat.name
         return categories_map
 
     def get_imageid_to_image(self) -> Dict[int, Image]:
@@ -60,10 +63,17 @@ class Coco(BaseModel):
             image_map[img.id] = img
         return image_map
     
-    def get_imageid_to_annotations(self)->Dict[int, List[Annotation]]:
+    def get_imageid_to_annotations(self, exclude_class:List[str]=[])->Dict[int, List[Annotation]]:
         imageid2anns = defaultdict(list)
+        exclude_class  = [lbl.lower() for lbl in exclude_class]
+        id2label = self.get_categoryid_to_namecat()
+        print(id2label)
+
         for ann in self.annotations:
-            imageid2anns[ann.image_id].append(ann)
+            if id2label[ann.category_id] not in exclude_class:
+                imageid2anns[ann.image_id].append(ann)
+            else:
+                print(id2label[ann.category_id], "Exclude")
         return imageid2anns
 
 

@@ -25,7 +25,7 @@ model_name = model_name_handler(args_task["model_name"])
 
 # Download Data
 print("\n[Downloading Data]")
-handler = DataHandler(args_data=args_data)
+handler = DataHandler(args_data=args_data, exclude_cls=args_data["exclude"])
 dataset_folder = handler.export(task_model=task_yolo)
 
 data_yaml_file = os.path.join(dataset_folder, "data.yaml")
@@ -35,7 +35,7 @@ datadotyaml = yaml_loader(data_yaml_file)
 
 # Tagging
 Task.current_task().add_tags(task_yolo)
-Task.current_task().add_tags(os.path.basename(model_name))
+Task.current_task().add_tags(os.path.basename(model_name).replace('.pt', ''))
 Task.current_task().add_tags(handler.source_type.upper())
 
 # Utils
