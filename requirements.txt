@@ -7,7 +7,7 @@
 # ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@5560391dd94556f0f9aaefbdf1bf8b887b8bd0a2
 # ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@disable-default-clearml#egg=ultralytics
 ultralytics==8.0.146
-clearml==1.12.0
+clearml==1.12.1
 
 # images
 opencv-python-headless>=4.8.0.74
