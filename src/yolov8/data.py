@@ -12,7 +12,7 @@ class DataHandler:
         self.source_type = self.__check_source()
         self.dataset_dir = os.path.join(os.getcwd(), "dataset-yolov8")
         self.dataset_test_dir = f"{self.dataset_dir}-test"
-        self.exclude_cls = self.args_data.get("exclude_cls", [])
+        self.exclude_cls = self.config.get("exclude", [])
 
     def __check_source(self):
         source_type = set()
