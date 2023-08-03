@@ -17,7 +17,7 @@ from src.utils.clearml_utils import init_clearml, config_clearml
 task = init_clearml()
 args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 print("ultralytics: version", ultralytics.__version__)
-# Task.current_task().execute_remotely()
+Task.current_task().execute_remotely()
 
 
 task_yolo = get_task_yolo_name(args_task["model_name"])
@@ -25,7 +25,7 @@ model_name = model_name_handler(args_task["model_name"])
 
 # Download Data
 print("\n[Downloading Data]")
-handler = DataHandler(args_data=args_data, exclude_cls=args_data["exclude"])
+handler = DataHandler(args_data=args_data)
 dataset_folder = handler.export(task_model=task_yolo)
 
 data_yaml_file = os.path.join(dataset_folder, "data.yaml")
