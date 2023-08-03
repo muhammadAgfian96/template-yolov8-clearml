@@ -49,13 +49,25 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8n"
+    "model_name": "yolov8m"
 }
 
 args_data = {
     "cvat": {
-        "task_ids_train": [191, 193, 179, 192, 184, 186, 174, 196, 250, 208, 182],
-        "task_ids_test": [194, 190],
+        "task_ids_train": [
+            174, 
+            179, 
+            182, 
+            # 184, 
+            186, 
+            190, 
+            191, 
+            192, 
+            193, 
+            196, 
+            250,
+        ],
+        "task_ids_test": [],
     },
     "label_studio": {
         "project_id_train": None,
@@ -67,25 +79,26 @@ args_data = {
         "val_ratio": 0.2,
         "test_ratio": None,
     },
+    "exclude": "stack, foreign_object"
 }
 
 
 args_train = {
     "augment": True,            
-    "epochs": 1000,              # number of epochs to train for
-    "patience": 50,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": 16,                # number of images per batch (-1 for AutoBatch)
+    "epochs": 800,              # number of epochs to train for
+    "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
+    "batch": 32,                # number of images per batch (-1 for AutoBatch)
     "imgsz": 640,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
-    "cache": False,             # True/ram, disk or False. Use cache for data loading
+    "cache": True,             # True/ram, disk or False. Use cache for data loading
     "device": None,             # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
     "workers": 8,               # number of worker threads for data loading (per RANK if DDP)
     "project": None,            # project name
     "name": None,               # experiment name
-    "exist_ok": False,          # whether to overwrite existing experiment
-    "pretrained": False,        # whether to use a pretrained model
-    "optimizer": "auto",        # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
+    "exist_ok": True,          # whether to overwrite existing experiment
+    "pretrained": True,        # whether to use a pretrained model
+    "optimizer": "AdamW",        # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
     "verbose": False,           # whether to print verbose output
     "seed": 0,                  # random seed for reproducibility
     "deterministic": True,      # whether to enable deterministic mode
@@ -95,7 +108,7 @@ args_train = {
     "close_mosaic": 0,          # (int) disable mosaic augmentation for final epochs
     "resume": False,            # resume training from last checkpoint
     "amp": True,                # Automatic Mixed Precision (AMP) training, choices=[True, False]
-    "fraction": 1.0,            # dataset fraction to train on (default is 1.0, all images in train set)
+    "fraction": 0.9,            # dataset fraction to train on (default is 1.0, all images in train set)
     "profile": False,           # profile ONNX and TensorRT speeds during training for loggers
     "lr0": 0.001,                # initial learning rate (i.e. SGD=1E-2, Adam=1E-3)
     "lrf": 0.0001,                # final learning rate (lr0 * lrf)
