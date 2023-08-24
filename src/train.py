@@ -17,7 +17,7 @@ from src.utils.clearml_utils import init_clearml, config_clearml
 task = init_clearml()
 args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 print("ultralytics: version", ultralytics.__version__)
-Task.current_task().execute_remotely()
+# Task.current_task().execute_remotely()
 
 
 task_yolo = get_task_yolo_name(args_task["model_name"])

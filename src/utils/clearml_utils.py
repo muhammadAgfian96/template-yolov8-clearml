@@ -17,7 +17,6 @@ def init_clearml():
         task_name="yolov8-train-debugging",
         reuse_last_task_id=False,
         auto_connect_frameworks={"pytorch": False, "matplotlib": False},
-        output_uri="s3://10.8.0.66:9000/clearml/mlops-artifacs"
     )
 
     task.set_script(

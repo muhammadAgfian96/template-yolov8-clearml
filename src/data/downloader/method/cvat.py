@@ -10,14 +10,15 @@ from typing import List
 from src.data.downloader.base_downloader import BaseDownloader
 from cvat_sdk import make_client
 from rich import print
+import env
 
 
 class CVATHTTPDownloaderV1(BaseDownloader):
     def __init__(self):
-        __URL_CVAT = os.getenv("CVAT_HOST")
-        __USERNAME_CVAT = os.getenv("CVAT_USERNAME")
-        __PASSWORD_CVAT = os.getenv("CVAT_PASSWORD")
-        __OUTPUT_DIR_TMP = os.getenv("TMP_DIR_CVAT")
+        __URL_CVAT = env.CVAT_HOST
+        __USERNAME_CVAT = env.CVAT_USERNAME
+        __PASSWORD_CVAT = env.CVAT_PASSWORD
+        __OUTPUT_DIR_TMP = env.TMP_DIR_CVAT
         __FORMAT_DATA = os.getenv("CVAT_FORMAT_DATA")
 
         if __URL_CVAT is None or __USERNAME_CVAT is None or __PASSWORD_CVAT is None:
@@ -163,12 +164,12 @@ class CVATHTTPDownloaderV1(BaseDownloader):
 
 class CVATHTTPDownloaderV2(BaseDownloader):
     def __init__(self):
-        __URL_CVAT = env.CVAT_SERVER_HOST
-        __USERNAME_CVAT = env.CVAT_SERVER_USERNAME
-        __PASSWORD_CVAT = env.CVAT_SERVER_PASSWORD
+        __URL_CVAT = env.CVAT_HOST
+        __USERNAME_CVAT = env.CVAT_USERNAME
+        __PASSWORD_CVAT = env.CVAT_PASSWORD
         __OUTPUT_DIR_TMP = env.TMP_DIR_CVAT
-        __ORGANIZATION = env.CVAT_SERVER_ORGANIZATION
-        __FORMAT_DATA = env.CVAT_SERVER_FORMAT_DATA
+        __ORGANIZATION = env.CVAT_ORGANIZATION
+        __FORMAT_DATA = env.CVAT_FORMAT_DATA
 
         if __URL_CVAT is None or __USERNAME_CVAT is None or __PASSWORD_CVAT is None:
             raise Exception('CVAT_HOST, CVAT_USERNAME, CVAT_PASSWORD must be set')

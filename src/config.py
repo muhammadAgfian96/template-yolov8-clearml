@@ -54,19 +54,7 @@ args_task = {
 
 args_data = {
     "cvat": {
-        "task_ids_train": [
-            174, 
-            179, 
-            182, 
-            # 184, 
-            186, 
-            190, 
-            191, 
-            192, 
-            193, 
-            196, 
-            250,
-        ],
+        "task_ids_train": [44, 46, 47, 86, 48],
         "task_ids_test": [],
     },
     "label_studio": {

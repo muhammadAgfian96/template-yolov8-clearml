@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
-
-load_dotenv('/workspace/src/.env')
+from utils.clearml_utils import init_clearml
+init_clearml()
+# load_dotenv('/workspace/src/.env')
 
 CVAT_USERNAME = os.getenv("CVAT_USERNAME")
 CVAT_PASSWORD = os.getenv("CVAT_PASSWORD")
