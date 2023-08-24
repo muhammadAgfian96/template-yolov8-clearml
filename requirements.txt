@@ -6,11 +6,11 @@
 # management
 # ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@5560391dd94556f0f9aaefbdf1bf8b887b8bd0a2
 # ultralytics @ git+https://github.com/muhammadAgfian96/ultralytics.git@disable-default-clearml#egg=ultralytics
-ultralytics==8.0.146
-clearml==1.12.1
+ultralytics==8.0.161
+clearml==1.12.2
 
 # images
-opencv-python-headless>=4.8.0.74
+opencv-python-headless>=4.8.0.76
 Pillow
 numpy
 pandas
@@ -19,7 +19,7 @@ pandas
 albumentations 
 label-studio-sdk==0.0.24
 label-studio-converter==0.0.53
-cvat-sdk==2.4.4
+cvat-sdk==2.6.0
 roboflow
 boto3
 gsutil 
