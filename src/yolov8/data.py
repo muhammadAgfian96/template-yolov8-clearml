@@ -1,7 +1,7 @@
 import os
 import shutil
 from src.data.converter.coco2yolo import Coco2Yolo
-from src.data.downloader.method.cvat import CVATHTTPDownloaderV1, CVATHTTPDownloaderV2
+from src.data.downloader.method.cvat import CVATHTTPDownloaderV2
 from src.schema.coco import Coco as CocoSchema
 from src.data.setup import setup_dataset
 from src.utils.general import read_json
@@ -51,11 +51,16 @@ class DataHandler:
         )
 
         for project_dir in ls_path_dir_projects:
+            print("Dataset DIR", project_dir)
+            
+            # get annotations and check task by annotations
             ann_train_val = os.path.join(project_dir, "annotations", "instances_default.json")
             d_anns = read_json(ann_train_val)
             coco = CocoSchema(**d_anns)
             annotation_type = coco.checking_task()
             use_segments = True if 'segmentation' in annotation_type else False
+
+            # converting raw coco -> yolo
             converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_dir)
             output_train, label_names = converter.convert(use_segments=use_segments, exclude_class=self.exclude_cls)
 

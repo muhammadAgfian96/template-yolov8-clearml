@@ -12,12 +12,9 @@ class Coco2Yolo:
     def __init__(self, src_dir, output_dir='./yolov8-dataset'):
         self.src_dir = src_dir
         self.output_dir = output_dir
-
-        if os.path.exists(self.output_dir):
-            shutil.rmtree(self.output_dir)
-
         self.src_img_dir = os.path.join(self.src_dir, 'images')
         self.src_lbl_filepath = os.path.join(self.src_dir, 'annotations', 'instances_default.json')
+        # print(self.__dict__)
 
     @staticmethod
     def __min_index(arr1, arr2):
@@ -155,8 +152,7 @@ class Coco2Yolo:
         return list(cat_id2name.values())
     
     def __setup_directory(self):
-        if os.path.exists(self.output_dir):
-            shutil.rmtree(self.output_dir)
+        print("setup_directory runnnig")
 
         # create new output directry
         self.out_img_dir = os.path.join(self.output_dir, 'images')
@@ -164,7 +160,9 @@ class Coco2Yolo:
         Path(self.out_img_dir).mkdir(parents=True, exist_ok=True)
         Path(self.out_lbl_dir).mkdir(parents=True, exist_ok=True)
 
+        print(self.src_img_dir, os.path.exists(self.src_img_dir))
         # copy to new output directory with uuid name
+        count_files = 0
         for root, dirs, files in os.walk(self.src_img_dir):
             for filename in files:
                 
@@ -180,12 +178,21 @@ class Coco2Yolo:
                 # labels
                 src_lbl_file = os.path.join(self.src_lbl_yolo, filename_only+'.txt')
                 dest_lbl_file = os.path.join(self.out_lbl_dir, new_filename_lbl)
+                # print("src_img_file", src_img_file, os.path.exists(src_img_file))
+                # print("dest_img_file", dest_img_file)
+                # print("src_lbl_file", src_lbl_file, os.path.exists(src_lbl_file))
+                # print("dest_lbl_file", dest_lbl_file, )
+
                 
                 if os.path.exists(src_lbl_file):
                     shutil.copy2(src_img_file, dest_img_file)
                     shutil.copy2(src_lbl_file, dest_lbl_file)
+                    count_files+=1
                 else:
                     print("⚠️", new_filename_wo_ext, "no annotations")
+        
+        print("count_files project:", count_files)
+        return count_files
 
     def convert(self, use_segments:bool, exclude_class=[]):
         print("Start Converting COCO to YOLO")
@@ -200,3 +207,22 @@ class Coco2Yolo:
         self.__setup_directory()
         print("Done")
         return self.output_dir, list_categories
+    
+if __name__ == "__main__":
+    print("start testing")
+    ls_path_dir_projects = [
+        "Vibrio-V2_0323-0423",
+        "vibrio-v2-newtrain-0823",
+        "vibrio-color-augment"
+    ]
+    ls_path_dir_projects = [os.path.join("tmp-cvat/Vibrio-v2", path) for path in ls_path_dir_projects]
+    if os.path.exists("./testing-debug-ds"):
+        shutil.rmtree("./testing-debug-ds")
+    tmp_total_count = 0
+    for project_dir in ls_path_dir_projects:
+        converter = Coco2Yolo(src_dir=project_dir, output_dir="./testing-debug-ds")
+        converter.src_lbl_yolo = os.path.join(converter.src_dir, "labels")
+        tmp_total_count+= converter.setup_directory()
+    
+    countfiles_finel = len(os.listdir("./testing-debug-ds/images"))
+    print("countfiles_finel", countfiles_finel, tmp_total_count, tmp_total_count==countfiles_finel)
