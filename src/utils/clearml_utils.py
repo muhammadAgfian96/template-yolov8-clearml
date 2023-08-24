@@ -14,7 +14,7 @@ def init_clearml():
     Task.add_requirements("/workspace/requirements.txt")
     task = Task.init(
         project_name="Debugging/Yolov8",
-        task_name="yolov8-train-debugging",
+        task_name="yolov8-train-new-template-v2.4",
         reuse_last_task_id=False,
         auto_connect_frameworks={"pytorch": False, "matplotlib": False},
     )
