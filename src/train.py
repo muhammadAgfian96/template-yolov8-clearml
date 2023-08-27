@@ -1,10 +1,14 @@
-import env
-import os
 import ultralytics
 from ultralytics import YOLO, settings
 settings['clearml'] = False
 
 from clearml import Task
+from utils.clearml_utils import init_clearml
+task = init_clearml()
+
+import env
+import os
+
 from rich import print
 from src.data.setup import cleanup_cache
 from src.yolov8.exporter import export_handler
@@ -14,7 +18,6 @@ from src.yolov8.data import DataHandler
 from src.utils.clearml_utils import init_clearml, config_clearml
 
 
-task = init_clearml()
 args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 print("ultralytics: version", ultralytics.__version__)
 Task.current_task().execute_remotely()

@@ -14,15 +14,14 @@ def init_clearml():
     Task.add_requirements("/workspace/requirements.txt")
     task = Task.init(
         project_name="Debugging/Yolov8",
-        task_name="yolov8-train-debugging",
+        task_name="yolov8-train-new-template-v2.4",
         reuse_last_task_id=False,
         auto_connect_frameworks={"pytorch": False, "matplotlib": False},
-        output_uri="s3://10.8.0.66:9000/clearml/mlops-artifacs"
     )
 
     task.set_script(
         repository="https://github.com/muhammadAgfian96/template-yolov8-clearml.git",
-        branch="public",
+        branch="ikan",
         working_dir=".",
         entry_point="src/train.py",
     )
