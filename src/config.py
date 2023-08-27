@@ -49,12 +49,13 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8m"
+    "model_name": "yolov8m",
+    # "pretrained": "(model_id)"
 }
 
 args_data = {
     "cvat": {
-        "task_ids_train": [44, 46, 47, 86, 48],
+        "task_ids_train": [44,46, 86],
         "task_ids_test": [],
     },
     "label_studio": {
@@ -67,16 +68,16 @@ args_data = {
         "val_ratio": 0.2,
         "test_ratio": None,
     },
-    "exclude": "stack, foreign_object"
+    "exclude": ""
 }
 
 
 args_train = {
     "augment": True,            
-    "epochs": 800,              # number of epochs to train for
+    "epochs": 10,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": 32,                # number of images per batch (-1 for AutoBatch)
-    "imgsz": 640,               # size of input images as integer or w,h
+    "batch": 1,                # number of images per batch (-1 for AutoBatch)
+    "imgsz": 512,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
     "cache": True,             # True/ram, disk or False. Use cache for data loading
