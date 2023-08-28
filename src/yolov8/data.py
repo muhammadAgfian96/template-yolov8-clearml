@@ -1,7 +1,7 @@
 import os
 import shutil
 from src.data.converter.coco2yolo import Coco2Yolo
-from src.data.downloader.method.cvat import CVATHTTPDownloaderV2
+from src.data.downloader.method.cvat import CVATHTTPDownloaderV2, CVATHTTPDownloaderV1
 from src.schema.coco import Coco as CocoSchema
 from src.data.setup import setup_dataset
 from src.utils.general import read_json
@@ -12,15 +12,18 @@ class DataHandler:
         self.source_type = self.__check_source()
         self.dataset_dir = os.path.join(os.getcwd(), "dataset-yolov8")
         self.dataset_test_dir = f"{self.dataset_dir}-test"
-        self.exclude_cls = self.config.get("exclude", [])
+        self.exclude_cls = self.config.get("class_exclude", [])
+        self.attributes_exclude = self.config.get("attributes_exclude", None)
+        self.area_segment_min = self.config.get("area_segment_min", None)
 
     def __check_source(self):
         source_type = set()
         for source, d in self.config.items():
             print(source, d)
-            if source == "params" or source == "exclude":
-                print("continue")
+            if source == "params" or source == "class_exclude" or source == "attributes_exclude" or source == "area_segment_min":
+                print(f"avoid {source}")
                 continue
+
             for k, v in d.items():
                 if v is None or v == "" or v == []:
                     continue
@@ -33,8 +36,8 @@ class DataHandler:
 
 
     def cvat_handler(self, task_model):
-        
-        # clean up
+
+        # clean up when do new training 
         if os.path.exists(self.dataset_dir):
             shutil.rmtree(self.dataset_dir)
         if os.path.exists(self.dataset_test_dir):
@@ -44,7 +47,7 @@ class DataHandler:
         task_id_train = self.config["cvat"]["task_ids_train"]
         task_id_test = self.config["cvat"]["task_ids_test"]
 
-        cvat_http = CVATHTTPDownloaderV2()
+        cvat_http = CVATHTTPDownloaderV1()
         ls_path_dir_projects = cvat_http.get_local_dataset_coco(
             task_ids=task_id_train,
             annotations_only=False
@@ -62,7 +65,12 @@ class DataHandler:
 
             # converting raw coco -> yolo
             converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_dir)
-            output_train, label_names = converter.convert(use_segments=use_segments, exclude_class=self.exclude_cls)
+            output_train, label_names = converter.convert(
+                use_segments=use_segments, 
+                exclude_class=self.exclude_cls, 
+                attributes_excluded=self.attributes_exclude,
+                area_segment_min=self.area_segment_min
+            )
 
         if task_id_test == [] or task_id_test is None:
             self.dataset_test_dir = None
@@ -78,7 +86,11 @@ class DataHandler:
                 annotation_type = coco.checking_task()
                 use_segments = True if 'segmentation' in annotation_type else False
                 converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_test_dir)
-                output_train, label_names = converter.convert(use_segments=use_segments, exclude_class=self.exclude_cls)   
+                output_train, label_names = converter.convert(
+                    use_segments=use_segments, 
+                    exclude_class=self.exclude_cls, 
+                    attributes_excluded=self.attributes_exclude
+                )   
 
 
         print("label_names:", label_names)
@@ -94,7 +106,6 @@ class DataHandler:
 
 
     def export(self, task_model):
-
         if self.source_type == "s3":
             pass
         elif self.source_type == "cvat":

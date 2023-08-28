@@ -117,7 +117,13 @@ class CVATHTTPDownloaderV1(BaseDownloader):
         else:
             download_url = urljoin(self.base_url, f'tasks/{task_id}/dataset?format=COCO%201.0')
         task_info = self.get_task_info(task_id=task_id)
-        project_info = self.get_project_info(task_info=task_info)
+        try:
+            project_info = self.get_project_info(task_info=task_info)
+        except Exception as e:
+            print(download_url, e)
+            raise Exception(f"ERROR taskid: {task_id} | task_info response=", task_info, e)
+            
+
 
         timeout_start = time.time()
         first_exporting_progress = False
