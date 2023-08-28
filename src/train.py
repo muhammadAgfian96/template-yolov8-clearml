@@ -20,7 +20,7 @@ from src.utils.clearml_utils import init_clearml, config_clearml
 
 args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 print("ultralytics: version", ultralytics.__version__)
-Task.current_task().execute_remotely()
+# Task.current_task().execute_remotely()
 
 
 task_yolo = get_task_yolo_name(args_task["model_name"])
@@ -34,6 +34,8 @@ dataset_folder = handler.export(task_model=task_yolo)
 data_yaml_file = os.path.join(dataset_folder, "data.yaml")
 if task_yolo == "classify":
     data_yaml_file = dataset_folder
+if task_yolo == "segment":
+    args_train["augment"] = False
 datadotyaml = yaml_loader(data_yaml_file)
 
 # Tagging

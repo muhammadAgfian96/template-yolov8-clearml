@@ -79,7 +79,7 @@ class Coco2Yolo:
     
     
     @staticmethod
-    def convert_coco_to_yolo(json_path, use_segments=False, output_dir='./labels', exclude_class=[]):
+    def convert_coco_to_yolo(json_path, use_segments=False, output_dir='./labels', exclude_class=[], attributes_excluded=None, area_segment_min=None):
         """
         Convert coco format to yolo format.
         Args:
@@ -99,7 +99,11 @@ class Coco2Yolo:
         coco = CocoSchema(**coco_d)
 
         images = coco.get_imageid_to_image()
-        imgToAnns = coco.get_imageid_to_annotations(exclude_class=exclude_class)
+        imgToAnns = coco.get_imageid_to_annotations(
+                exclude_class=exclude_class,
+                attributes_excluded=attributes_excluded,
+                area_segment_min=area_segment_min
+            )
         
         # write labels in txt file
         cat_id2name =coco.get_categoryid_to_namecat(exclude_class=exclude_class)
@@ -194,18 +198,20 @@ class Coco2Yolo:
         print("count_files project:", count_files)
         return count_files
 
-    def convert(self, use_segments:bool, exclude_class=[]):
-        print("Start Converting COCO to YOLO")
+    def convert(self, use_segments:bool, exclude_class=[], attributes_excluded=None, area_segment_min=None):
+        print("Start Converting and Filtering COCO to YOLO")
         self.src_lbl_yolo = os.path.join(self.src_dir, "labels")
         list_categories = Coco2Yolo.convert_coco_to_yolo(
             json_path=self.src_lbl_filepath, 
             use_segments=use_segments,
             output_dir=self.src_lbl_yolo,
-            exclude_class=exclude_class
+            exclude_class=exclude_class,
+            attributes_excluded=attributes_excluded,
+            area_segment_min=area_segment_min
         )
-        print("Setup Directory")
+        print("Setup Directory: Manage Files to structure of YOLO")
         self.__setup_directory()
-        print("Done")
+        print("Done Converting and Filtering COCO to YOLO")
         return self.output_dir, list_categories
     
 if __name__ == "__main__":
