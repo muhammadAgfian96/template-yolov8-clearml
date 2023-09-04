@@ -1,4 +1,4 @@
-FROM python:3.10.11-slim
+FROM python:3.11-slim
 
 # Install linux packages
 ENV DEBIAN_FRONTEND noninteractive

@@ -49,13 +49,13 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8n-seg",
+    "model_name": "yolov8n",
     # "pretrained": "(model_id)"
 }
 
 args_data = {
     "cvat": {
-        "task_ids_train": [49, 69],
+        "task_ids_train": [292, 288, 290],
         "task_ids_test": [],
     },
     "label_studio": {
@@ -71,7 +71,7 @@ args_data = {
     "class_exclude": None,
     # "attributes_exclude": {"maturity_truth": "background"},
     "attributes_exclude": None,
-    "area_segment_min": 50000,
+    "area_segment_min": 0,
 }
 
 

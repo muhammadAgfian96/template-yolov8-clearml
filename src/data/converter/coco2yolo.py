@@ -150,8 +150,12 @@ class Coco2Yolo:
             txt_file = os.path.join(output_dir, filename.replace(ext_file, 'txt'))
             with open(txt_file, 'a') as file:
                 for i in range(len(bboxes)):
-                    line = *(segments[i] if use_segments else bboxes[i]),  # cls, box or segments
-                    file.write(('%g ' * len(line)).rstrip() % line + '\n')
+                    try:
+                        line = *(segments[i] if use_segments else bboxes[i]),  # cls, box or segments
+                        file.write(('%g ' * len(line)).rstrip() % line + '\n')
+                    except Exception as e:
+                        print("Error", e)
+                        raise Exception(f"ERROR CONVERTER: {txt_file} idx:{i} use_segments={use_segments} -> {e} >> {bboxes}")
 
         return list(cat_id2name.values())
     

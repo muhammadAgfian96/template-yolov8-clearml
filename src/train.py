@@ -25,10 +25,10 @@ print("ultralytics: version", ultralytics.__version__)
 
 task_yolo = get_task_yolo_name(args_task["model_name"])
 model_name = model_name_handler(args_task["model_name"])
-
+print("TASK_YOLO", task_yolo)
 # Download Data
 print("\n[Downloading Data]")
-handler = DataHandler(args_data=args_data)
+handler = DataHandler(args_data=args_data, task_model=task_yolo)
 dataset_folder = handler.export(task_model=task_yolo)
 
 data_yaml_file = os.path.join(dataset_folder, "data.yaml")

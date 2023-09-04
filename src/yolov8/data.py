@@ -7,7 +7,7 @@ from src.data.setup import setup_dataset
 from src.utils.general import read_json
 
 class DataHandler:
-    def __init__(self, args_data):
+    def __init__(self, args_data, task_model=None):
         self.config = args_data
         self.source_type = self.__check_source()
         self.dataset_dir = os.path.join(os.getcwd(), "dataset-yolov8")
@@ -15,6 +15,7 @@ class DataHandler:
         self.exclude_cls = self.config.get("class_exclude", [])
         self.attributes_exclude = self.config.get("attributes_exclude", None)
         self.area_segment_min = self.config.get("area_segment_min", None)
+        self.task_model = task_model
 
     def __check_source(self):
         source_type = set()
@@ -61,7 +62,10 @@ class DataHandler:
             d_anns = read_json(ann_train_val)
             coco = CocoSchema(**d_anns)
             annotation_type = coco.checking_task()
+            print("annotation_type", annotation_type, "task_model", self.task_model)
             use_segments = True if 'segmentation' in annotation_type else False
+            if self.task_model == "detect":
+                use_segments = False
 
             # converting raw coco -> yolo
             converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_dir)
