@@ -13,8 +13,8 @@ from src.config import (
 def init_clearml():
     Task.add_requirements("/workspace/requirements.txt")
     task = Task.init(
-        project_name="Debugging/Yolov8",
-        task_name="yolov8-train-new-template-v2.4",
+        project_name="Template/Yolov8",
+        task_name="yolov8-train-new-template-v2.6",
         reuse_last_task_id=False,
         auto_connect_frameworks={"pytorch": False, "matplotlib": False},
     )
@@ -30,7 +30,7 @@ def init_clearml():
         docker_image="yolov8-custom:gpu-py3.10.11",
         docker_arguments=["-e PYTHONPATH=/workspace", "--gpus all", "--shm-size=24g"],
     )
-    tags = ['🏷️ v2.5', '🐞 debug']
+    tags = ['🏷️ v2.6', '🐞 debug']
     task.set_tags(tags)
     return Task.current_task()
 
