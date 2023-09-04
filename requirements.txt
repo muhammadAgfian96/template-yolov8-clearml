@@ -1,4 +1,4 @@
-ultralytics==8.0.163
+ultralytics==8.0.170
 clearml[s3]==1.12.2
 pydantic<2.0.0
 # images
