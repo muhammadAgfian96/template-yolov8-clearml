@@ -74,6 +74,8 @@ class Coco(BaseModel):
         This function will return a dictionary of image_id to annotations
         and filters in level annotations happen here
         """
+        if exclude_class is None:
+            exclude_class = []
 
         imageid2anns = defaultdict(list)
         exclude_class  = [lbl.lower() for lbl in exclude_class]

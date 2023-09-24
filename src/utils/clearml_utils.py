@@ -11,27 +11,29 @@ from src.config import (
 )
 
 def init_clearml():
-    Task.add_requirements("/workspace/requirements.txt")
-    task = Task.init(
-        project_name="Template/Yolov8",
-        task_name="yolov8-train-new-template-v2.6",
-        reuse_last_task_id=False,
-        auto_connect_frameworks={"pytorch": False, "matplotlib": False},
-    )
+    print("init clearml, Task.current_task=", Task.current_task())
+    if Task.current_task() is None:
+        Task.add_requirements("/workspace/requirements.txt")
+        task = Task.init(
+            project_name="Template/Yolov8",
+            task_name="yolov8-train-new-template-v2.6",
+            reuse_last_task_id=False,
+            auto_connect_frameworks={"pytorch": False, "matplotlib": False},
+        )
 
-    task.set_script(
-        repository="https://github.com/muhammadAgfian96/template-yolov8-clearml.git",
-        branch="public",
-        working_dir=".",
-        entry_point="src/train.py",
-    )
+        task.set_script(
+            repository="https://github.com/muhammadAgfian96/template-yolov8-clearml.git",
+            branch="public",
+            working_dir=".",
+            entry_point="src/train.py",
+        )
 
-    task.set_base_docker(
-        docker_image="yolov8-custom:gpu-py3.10.11",
-        docker_arguments=["-e PYTHONPATH=/workspace", "--gpus all", "--shm-size=24g"],
-    )
-    tags = ['🏷️ v2.6', '🐞 debug']
-    task.set_tags(tags)
+        task.set_base_docker(
+            docker_image="yolov8-custom:gpu-py3.10.11",
+            docker_arguments=["-e PYTHONPATH=/workspace", "--gpus all", "--shm-size=24g"],
+        )
+        tags = ['🏷️ v2.6', '🐞 debug']
+        task.set_tags(tags)
     return Task.current_task()
 
 def config_clearml():

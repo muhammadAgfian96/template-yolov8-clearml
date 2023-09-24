@@ -1,12 +1,12 @@
-ultralytics==8.0.170
-clearml[s3]==1.12.2
+ultralytics==8.0.184
+clearml[s3]==1.13.0
 pydantic<2.0.0
 # images
 opencv-python-headless>=4.8.0.76
 Pillow>=9.3.0
 
 # data
-albumentations 
+albumentations==1.3.1
 label-studio-sdk==0.0.30
 label-studio-converter==0.0.55
 cvat-sdk==2.6.0
@@ -25,7 +25,7 @@ coremltools==6.3.0
 onnx==1.14.1
 onnx-simplifier==0.4.33
 onnxruntime==1.15.1
-openvino-dev>=2022.3
+openvino-dev>=2023.1.0
 # nvidia-tensorrt
 # tensorflow 
 # tensorflowjs

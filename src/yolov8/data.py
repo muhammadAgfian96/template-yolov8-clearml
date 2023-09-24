@@ -1,3 +1,6 @@
+from src.utils.clearml_utils import init_clearml
+task = init_clearml()
+
 import os
 import shutil
 from src.data.converter.coco2yolo import Coco2Yolo
@@ -43,8 +46,9 @@ class DataHandler:
             shutil.rmtree(self.dataset_dir)
         if os.path.exists(self.dataset_test_dir):
             shutil.rmtree(self.dataset_test_dir)
+            
+        total_count_files = 0
 
-        
         task_id_train = self.config["cvat"]["task_ids_train"]
         task_id_test = self.config["cvat"]["task_ids_test"]
 
@@ -55,7 +59,7 @@ class DataHandler:
         )
 
         for project_dir in ls_path_dir_projects:
-            print("Dataset DIR", project_dir)
+            print("\n📁 Dataset DIR ", project_dir, " 📁")
             
             # get annotations and check task by annotations
             ann_train_val = os.path.join(project_dir, "annotations", "instances_default.json")
@@ -90,13 +94,14 @@ class DataHandler:
                 annotation_type = coco.checking_task()
                 use_segments = True if 'segmentation' in annotation_type else False
                 converter = Coco2Yolo(src_dir=project_dir, output_dir=self.dataset_test_dir)
-                output_train, label_names = converter.convert(
+                output_train, label_names, countfiles = converter.convert(
                     use_segments=use_segments, 
                     exclude_class=self.exclude_cls, 
                     attributes_excluded=self.attributes_exclude
                 )   
+                total_count_files += countfiles
 
-
+        print("🧮 total_count_files", total_count_files)
         print("label_names:", label_names)
         setup_dataset(
             dataset_dir=self.dataset_dir,
@@ -120,3 +125,20 @@ class DataHandler:
             raise ValueError("Cek config datanya pak. source must be s3, cvat or label_studio")
         
         return self.dataset_dir
+    
+if __name__ == "__main__":
+    from src.utils.clearml_utils import init_clearml
+    task = init_clearml()
+    
+    from src.config import (
+        args_augment, args_export, args_logging,
+        args_task, args_data, args_train, args_val
+    )
+    
+    from src.utils.general import get_task_yolo_name, yaml_loader, model_name_handler
+
+    task_yolo = get_task_yolo_name(args_task["model_name"])
+
+    handler = DataHandler(args_data=args_data, task_model=task_yolo)
+    dataset_folder = handler.export(task_model=task_yolo)
+    
