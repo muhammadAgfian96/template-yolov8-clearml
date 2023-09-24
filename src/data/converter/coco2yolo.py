@@ -203,8 +203,7 @@ class Coco2Yolo:
         # tell len of images and labels
         total_images = count_files_in_directory(self.src_img_dir, extensions=image_extensions)
         total_labels = count_files_in_directory(self.src_lbl_yolo, extensions=[".txt"])
-        print("len images", total_images)
-        print("len labels", total_labels)
+        print("is_match:", total_images==total_labels, "len images", total_images, "len labels", total_labels)
         
         count_no_annotations = 0
         
@@ -231,8 +230,7 @@ class Coco2Yolo:
                 else:
                     count_no_annotations+=1
         
-        print("count_files project:", count_files)
-        print("count_no_annotations project:", count_no_annotations)
+        print("is_match",count_files==count_no_annotations, "count_files project:", count_files, "count_no_annotations project:", count_no_annotations)
         return count_files
 
     def convert(self, use_segments:bool, exclude_class=[], attributes_excluded=None, area_segment_min=None):
@@ -247,9 +245,9 @@ class Coco2Yolo:
             area_segment_min=area_segment_min
         )
         print("Setup Directory: Manage Files to structure of YOLO")
-        self.setup_directory()
+        conut_data = self.setup_directory()
         print("Done Converting and Filtering COCO to YOLO")
-        return self.output_dir, list_categories
+        return self.output_dir, list_categories, conut_data
     
 if __name__ == "__main__":
     print("start testing")

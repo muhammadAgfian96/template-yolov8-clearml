@@ -10,7 +10,7 @@ from typing import List
 from src.data.downloader.base_downloader import BaseDownloader
 from cvat_sdk import make_client
 from rich import print
-import env
+import src.env as env
 
 
 class CVATHTTPDownloaderV1(BaseDownloader):
@@ -135,7 +135,7 @@ class CVATHTTPDownloaderV1(BaseDownloader):
 
             if response.status_code == 202 and first_exporting_progress:
                 first_exporting_progress = True
-                print('🍆', end='', flush=True)
+                print('🍆', end='\r', flush=True)
             else:
                 self.print_task_status(response)
             
@@ -221,12 +221,10 @@ class CVATHTTPDownloaderV2(BaseDownloader):
     @staticmethod
     def save_file(response, file_name):
         total_size_mb = round(len(response.content)/1024000, 2)
-        print('Downloading', file_name)
-        print('TOTAL SIZE: ', total_size_mb, 'MB')
+        print('Downloading', file_name, ' | SIZE: ', total_size_mb, 'MB')
         with open(file_name, 'wb') as f:
             for chunk in tqdm(response.iter_content(chunk_size=1024000), total=total_size_mb, ncols=72):
                 f.write(chunk)
-        print('Downloaded: ', total_size_mb, 'MB')
 
     def extract_file(self, file_name, project_info, task_info):
         with zipfile.ZipFile(file_name, 'r') as zip_ref:
@@ -290,7 +288,7 @@ class CVATHTTPDownloaderV2(BaseDownloader):
 
             if response.status_code == 202 and first_exporting_progress:
                 first_exporting_progress = True
-                print('🍆', end='', flush=True)
+                print('🍆', end='\r', flush=True)
             else:
                 self.print_task_status(response)
             
