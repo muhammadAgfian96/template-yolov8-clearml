@@ -26,6 +26,7 @@ Task.current_task().execute_remotely()
 task_yolo = get_task_yolo_name(args_task["model_name"])
 model_name = model_name_handler(args_task["model_name"])
 print("TASK_YOLO", task_yolo)
+
 # Download Data
 print("\n[Downloading Data]")
 handler = DataHandler(args_data=args_data, task_model=task_yolo)

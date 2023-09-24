@@ -60,7 +60,7 @@ class DataHandler:
         )
 
         for project_dir in ls_path_dir_projects:
-            print("\n📁 Dataset DIR ", project_dir, " 📁")
+            print("\n📁 Dataset ", project_dir, " 📁")
             
             # get annotations and check task by annotations
             ann_train_val = os.path.join(project_dir, "annotations", "instances_default.json")
