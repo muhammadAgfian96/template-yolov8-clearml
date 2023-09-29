@@ -78,7 +78,7 @@ args_data = {
 
 args_train = {
     "augment": True,            
-    "epochs": 10,              # number of epochs to train for
+    "epochs": 1015,              # number of epochs to train for
     "patience": 30,             # epochs to wait for no observable improvement for early stopping of training
     "batch": 1,                # number of images per batch (-1 for AutoBatch)
     "imgsz": 640,               # size of input images as integer or w,h

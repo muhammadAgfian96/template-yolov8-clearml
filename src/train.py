@@ -58,8 +58,7 @@ print("datadotyaml", datadotyaml)
 print("\n[Training]")
 print("LOAD MODEL", model_name)
 model_yolo = YOLO(model=model_name)
-if args_train["resume"]:
-    model_yolo.resume = True
+
 
 print("Override Callbacks")
 for event, func in callbacks.items():
@@ -67,7 +66,11 @@ for event, func in callbacks.items():
     model_yolo.add_callback(event, func)
 
 args_val["imgsz"] = args_train["imgsz"]
-model_yolo.train(data=data_yaml_file, **args_train)
+if args_train["resume"]:
+    model_yolo.resume = True
+    model_yolo.train(data=data_yaml_file, epochs=args_train["epochs"])
+else:
+    model_yolo.train(data=data_yaml_file, **args_train)
 
 cleanup_cache(dataset_folder)
 if datadotyaml.get('test'):
