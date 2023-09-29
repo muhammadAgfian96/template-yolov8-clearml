@@ -72,7 +72,7 @@ if args_train["resume"]:
     model_yolo.train(
         data=data_yaml_file, 
         epochs=args_train["epochs"], 
-        batch_size=args_train["batch"]
+        batch=args_train["batch"]
     )
 else:
     model_yolo.train(data=data_yaml_file, **args_train)
