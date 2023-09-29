@@ -67,8 +67,13 @@ for event, func in callbacks.items():
 
 args_val["imgsz"] = args_train["imgsz"]
 if args_train["resume"]:
+    print("RESUME TRAINING")
     model_yolo.resume = True
-    model_yolo.train(data=data_yaml_file, epochs=args_train["epochs"])
+    model_yolo.train(
+        data=data_yaml_file, 
+        epochs=args_train["epochs"], 
+        batch_size=args_train["batch"]
+    )
 else:
     model_yolo.train(data=data_yaml_file, **args_train)
 
