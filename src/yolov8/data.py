@@ -53,7 +53,19 @@ class DataHandler:
         task_id_train = self.config["cvat"]["task_ids_train"]
         task_id_test = self.config["cvat"]["task_ids_test"]
 
-        cvat_http = CVATHTTPDownloaderV1()
+        
+        is_server1, _ = CVATHTTPDownloaderV1().get_about_server()
+        is_server2, _ = CVATHTTPDownloaderV2().get_about_server()
+        if is_server1:
+            print("CVAT Server V1")
+            cvat_http = CVATHTTPDownloaderV1()
+        elif is_server2:
+            print("CVAT Server V2")
+            cvat_http = CVATHTTPDownloaderV2()
+        else:
+            raise ValueError("CVAT Server not found")
+            
+        
         ls_path_dir_projects = cvat_http.get_local_dataset_coco(
             task_ids=task_id_train,
             annotations_only=False
