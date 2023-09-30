@@ -21,7 +21,7 @@ from src.utils.clearml_utils import init_clearml, config_clearml
 args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 print("ultralytics: version", ultralytics.__version__)
 Task.current_task().add_tags(f"yv8-{ultralytics.__version__}")
-# Task.current_task().execute_remotely()
+Task.current_task().execute_remotely()
 
 task_yolo = get_task_yolo_name(args_task["model_name"])
 if not args_train["resume"]:
@@ -67,8 +67,14 @@ for event, func in callbacks.items():
 
 args_val["imgsz"] = args_train["imgsz"]
 if args_train["resume"]:
+    print("RESUME TRAINING")
     model_yolo.resume = True
-    model_yolo.train(data=data_yaml_file, epochs=args_train["epochs"])
+    model_yolo.train(
+        data=data_yaml_file, 
+        epochs=args_train["epochs"], 
+        batch=args_train["batch"],
+        patience=args_train["patience"]
+    )
 else:
     model_yolo.train(data=data_yaml_file, **args_train)
 

@@ -23,7 +23,7 @@ def init_clearml():
 
         task.set_script(
             repository="https://github.com/muhammadAgfian96/template-yolov8-clearml.git",
-            branch="public",
+            # branch="public",
             working_dir=".",
             entry_point="src/train.py",
         )
