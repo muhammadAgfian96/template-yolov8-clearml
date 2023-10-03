@@ -125,6 +125,7 @@ class Coco2Yolo:
             coco_d = json.load(f)
 
         coco = CocoSchema(**coco_d)
+        coco.filter_category(exclude_class=exclude_class)
 
         images = coco.get_imageid_to_image()
         imgToAnns = coco.get_imageid_to_annotations(
@@ -134,7 +135,8 @@ class Coco2Yolo:
             )
         
         # write labels in txt file
-        cat_id2name =coco.get_categoryid_to_namecat(exclude_class=exclude_class)
+        cat_id2name =coco.get_categoryid_to_namecat()
+        print("got cat_id2name", cat_id2name)
 
         for image_id, img_annotatins in tqdm(imgToAnns.items(), desc="Converting COCO to YOLO"):
             img = images[image_id]

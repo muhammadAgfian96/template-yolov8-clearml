@@ -53,15 +53,16 @@ class Coco(BaseModel):
         print("len_images", len(self.images))
         print("len_annotations", len(self.annotations))
 
-        if len(exclude_class) == 0:
+        if not exclude_class:
             return
 
-        exclude_class  = [lbl.lower() for lbl in exclude_class]
+        exclude_class = set(lbl.lower() for lbl in exclude_class)
 
         map_old_to_new_categories = {}
         new_category = []
-        new_id = 0
+        new_id = 1
         for cat in self.categories:
+            print("cat.name.lower()",cat.id, cat.name.lower(), exclude_class)
             if cat.name.lower() not in exclude_class: 
                 map_old_to_new_categories[cat.id] = new_id
                 new_category.append(Category(
@@ -71,28 +72,35 @@ class Coco(BaseModel):
                 ))
                 new_id += 1
 
+
+        print("map_old_to_new_categories", map_old_to_new_categories)
         new_ls_annotations = []
         ls_imgs_id_without_ann = []
 
         for ann in self.annotations:
             new_cat_id = map_old_to_new_categories.get(ann.category_id)
-            if new_cat_id:
+            if new_cat_id is not None:
                 ann.category_id = new_cat_id
                 new_ls_annotations.append(ann)
             else:
                 ls_imgs_id_without_ann.append(ann.image_id)
 
+
+        # reindex
         for idx, ann in enumerate(new_ls_annotations):
             ann.id = idx
 
-        # remove images without annotations
-        ls_new_images = []
-        for img in self.images:
-            if img.id not in ls_imgs_id_without_ann:
-                ls_new_images.append(img)
-        
-        for idx, image in enumerate(ls_new_images):
-            image.id = idx
+        # remove images without annotations and reindex
+        image_ids_with_annotations = {ann.image_id for ann in new_ls_annotations}
+        ls_new_images = [img for img in self.images if img.id in image_ids_with_annotations]
+
+
+        # Reindex images and adjust image_id in annotations
+        map_old_to_new_image_ids = {img.id: idx for idx, img in enumerate(ls_new_images, start=1)}
+        for idx, image in enumerate(ls_new_images, start=1):
+            image.id = map_old_to_new_image_ids[image.id]
+        for ann in new_ls_annotations:
+            ann.image_id = map_old_to_new_image_ids[ann.image_id]
 
         self.images = ls_new_images
         self.categories = new_category
@@ -132,7 +140,7 @@ class Coco(BaseModel):
 
         imageid2anns = defaultdict(list)
         exclude_class  = [lbl.lower() for lbl in exclude_class]
-        id2label = self.get_categoryid_to_namecat(exclude_class=exclude_class)
+        id2label = self.get_categoryid_to_namecat()
         print(id2label)
         
 
