@@ -45,7 +45,7 @@ args_export = {
 
 args_logging = {
     "project": "Debug/yolov8",
-    "name": "training-yolo",
+    "name": "training-yolo-test",
 }
 
 args_task = {
@@ -58,10 +58,10 @@ args_data = {
     "cvat": {
         "task_ids_train": [
             193, 191, 179, 192, 
-            184, 186, 196, 190, 
-            194, 182, 174, 208, 
-            259, 257, 263, 258, 
-            250, 275
+            # 184, 186, 196, 190, 
+            # 194, 182, 174, 208, 
+            # 259, 257, 263, 258, 
+            # 250, 275
         ],
         "task_ids_test": [],
     },
@@ -84,17 +84,17 @@ args_data = {
 
 args_train = {
     "augment": True,            
-    "epochs": 1000,              # number of epochs to train for
+    "epochs": 100,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": 2,                # number of images per batch (-1 for AutoBatch)
+    "batch": 10,                # number of images per batch (-1 for AutoBatch)
     "imgsz": 512,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
     "cache": True,             # True/ram, disk or False. Use cache for data loading
-    "device": None,             # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
-    "workers": 8,               # number of worker threads for data loading (per RANK if DDP)
-    "project": None,            # project name
-    "name": None,               # experiment name
+    # "device": None,             # device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
+    "workers": 6,               # number of worker threads for data loading (per RANK if DDP)
+    # "project": None,            # project name
+    # "name": None,               # experiment name
     "exist_ok": True,          # whether to overwrite existing experiment
     "pretrained": True,        # whether to use a pretrained model
     "optimizer": "auto",        # optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
@@ -137,7 +137,7 @@ args_val = {
     "iou": 0.6,             # intersection over union (IoU) threshold for NMS
     "max_det": 100,        # maximum number of detections per image
     "half": True,           # use half precision (FP16)
-    "device": 0,         # device to run on, i.e. cuda device=0/1/2/3 or device=cpu
+    # "device": 0,         # device to run on, i.e. cuda device=0/1/2/3 or device=cpu
     "dnn": False,           # use OpenCV DNN for ONNX inference
     "plots": True,         # show plots during training
     "rect": False,          # rectangular val with each batch collated for minimum padding

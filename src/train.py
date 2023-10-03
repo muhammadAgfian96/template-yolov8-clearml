@@ -37,13 +37,15 @@ handler = DataHandler(args_data=args_data, task_model=task_yolo)
 dataset_folder, figure_data_dist = handler.export(task_model=task_yolo)
 task.get_logger().report_plotly(title="Data Distribution", series="Data Distribution", 
                                 iteration=0, figure=figure_data_dist)
-
+# dataset_folder = "dataset-yolov8"
 data_yaml_file = os.path.join(dataset_folder, "data.yaml")
+print("data_yaml_file", data_yaml_file)
 if task_yolo == "classify":
     data_yaml_file = dataset_folder
 if task_yolo == "segment":
     args_train["augment"] = False
 datadotyaml = yaml_loader(data_yaml_file)
+
 
 # Tagging
 task.add_tags(task_yolo)

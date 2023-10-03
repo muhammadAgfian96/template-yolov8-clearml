@@ -84,6 +84,8 @@ class DataHandler:
             ann_train_val = os.path.join(project_dir, "annotations", "instances_default.json")
             d_anns = read_json(ann_train_val)
             coco = CocoSchema(**d_anns)
+            # coco.filter_category(exclude_class=self.exclude_cls)
+            # print("category", coco.get_categoryid_to_namecat())
             annotation_type = coco.checking_task()
             print("annotation_type", annotation_type, "task_model", self.task_model)
             use_segments = True if 'segmentation' in annotation_type else False
