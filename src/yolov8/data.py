@@ -9,6 +9,7 @@ from src.schema.coco import Coco as CocoSchema
 from src.data.setup import setup_dataset
 from src.utils.general import read_json
 from src.data.converter.coco2yolo import count_files_in_directory, image_extensions
+import plotly.graph_objects as go
 
 class DataHandler:
     def __init__(self, args_data, task_model=None):
@@ -53,14 +54,19 @@ class DataHandler:
         task_id_train = self.config["cvat"]["task_ids_train"]
         task_id_test = self.config["cvat"]["task_ids_test"]
 
+        # label_names = [label_name for label_name in label_names if label_name not in self.exclude_cls]
+
+
         
-        is_server1, _ = CVATHTTPDownloaderV1().get_about_server()
-        is_server2, _ = CVATHTTPDownloaderV2().get_about_server()
+        is_server1, about_cvat1 = CVATHTTPDownloaderV1().get_about_server()
+        is_server2, about_cvat2 = CVATHTTPDownloaderV2().get_about_server()
         if is_server1:
             print("CVAT Server V1")
+            print("about_cvat", about_cvat1)
             cvat_http = CVATHTTPDownloaderV1()
         elif is_server2:
             print("CVAT Server V2")
+            print("about_cvat", about_cvat2)
             cvat_http = CVATHTTPDownloaderV2()
         else:
             raise ValueError("CVAT Server not found")
@@ -124,7 +130,8 @@ class DataHandler:
             label_names=label_names,
             train_ratio=self.config["params"]["train_ratio"],
             valid_ratio=self.config["params"]["val_ratio"],
-            test_ratio=self.config["params"]["test_ratio"]
+            test_ratio=self.config["params"]["test_ratio"],
+            class_exclude=self.exclude_cls,
         )
         count_imgs_train = count_files_in_directory(os.path.join(self.dataset_dir, "train"), extensions=image_extensions)
         count_lbls_train = count_files_in_directory(os.path.join(self.dataset_dir, "train"), extensions=["txt"])
@@ -136,18 +143,61 @@ class DataHandler:
         print("🧮 [Val] TOTAL COUNT IMAGES", count_imgs_val, "| TOTAL COUNT LABELS", count_lbls_val)
         print("🧮 [Test] TOTAL COUNT IMAGES", count_imgs_test, "| TOTAL COUNT LABELS", count_lbls_test)
 
+        data_count = {
+            "train": {
+                "count_imgs": count_imgs_train,
+                "count_lbls": count_lbls_train
+            },
+            "val": {
+                "count_imgs": count_imgs_val,
+                "count_lbls": count_lbls_val
+            },
+            "test": {
+                "count_imgs": count_imgs_test,
+                "count_lbls": count_lbls_test
+            }
+        }
+        fig = self.visualize_data(data_count)
+        return data_count, fig
+
 
     def export(self, task_model):
+        figure = None
         if self.source_type == "s3":
             pass
         elif self.source_type == "cvat":
-            self.cvat_handler(task_model=task_model)
+            result, figure = self.cvat_handler(task_model=task_model)
+
         elif self.source_type == "label_studio":
             pass
         else:
             raise ValueError("Cek config datanya pak. source must be s3, cvat or label_studio")
         
-        return self.dataset_dir
+        return self.dataset_dir, figure
+    
+    def visualize_data(self, data):
+        datasets = list(data.keys())
+
+        # Mengumpulkan data count_imgs dan count_lbls untuk setiap dataset
+        count_imgs = [data[dataset]['count_imgs'] for dataset in datasets]
+        count_lbls = [data[dataset]['count_lbls'] for dataset in datasets]
+
+        # Membuat bar chart
+        fig = go.Figure(data=[
+            go.Bar(name='Images', x=datasets, y=count_imgs),
+            go.Bar(name='Labels', x=datasets, y=count_lbls)
+        ])
+
+        # Mengubah tampilan diagram
+        fig.update_layout(
+            title='Comparison of Image and Label Counts',
+            xaxis_title='Dataset',
+            yaxis_title='Count',
+            barmode='group'  # Ini akan menampilkan diagram batang berdampingan
+        )
+
+        # Menampilkan diagram
+        return fig
     
 if __name__ == "__main__":
     from src.utils.clearml_utils import init_clearml

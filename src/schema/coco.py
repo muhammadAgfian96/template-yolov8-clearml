@@ -48,14 +48,67 @@ class Coco(BaseModel):
     images: List[Image]
     annotations: Optional[List[Annotation]]
 
-    def get_categoryid_to_namecat(self, exclude_class:List[str]=[])->Dict[int, str]:
+    def filter_category(self, exclude_class:List[str]=[])->List[str]:
+        print("len_categories", len(self.categories))
+        print("len_images", len(self.images))
+        print("len_annotations", len(self.annotations))
+
+        if len(exclude_class) == 0:
+            return
+
+        exclude_class  = [lbl.lower() for lbl in exclude_class]
+
+        map_old_to_new_categories = {}
+        new_category = []
+        new_id = 0
+        for cat in self.categories:
+            if cat.name.lower() not in exclude_class: 
+                map_old_to_new_categories[cat.id] = new_id
+                new_category.append(Category(
+                    id=new_id,
+                    name=cat.name.lower(),
+                    supercategory=cat.supercategory
+                ))
+                new_id += 1
+
+        new_ls_annotations = []
+        ls_imgs_id_without_ann = []
+
+        for ann in self.annotations:
+            new_cat_id = map_old_to_new_categories.get(ann.category_id)
+            if new_cat_id:
+                ann.category_id = new_cat_id
+                new_ls_annotations.append(ann)
+            else:
+                ls_imgs_id_without_ann.append(ann.image_id)
+
+        for idx, ann in enumerate(new_ls_annotations):
+            ann.id = idx
+
+        # remove images without annotations
+        ls_new_images = []
+        for img in self.images:
+            if img.id not in ls_imgs_id_without_ann:
+                ls_new_images.append(img)
+        
+        for idx, image in enumerate(ls_new_images):
+            image.id = idx
+
+        self.images = ls_new_images
+        self.categories = new_category
+        self.annotations = new_ls_annotations
+
+        print("NEW len_categories", len(self.categories))
+        print("NEW len_images", len(self.images))
+        print("NEW len_annotations", len(self.annotations))
+
+    def get_categoryid_to_namecat(self)->Dict[int, str]:
         categories_map = {}
         # exclude_class  = [lbl.lower() for lbl in exclude_class]
         # if len(exclude_class) > 0:
         #     print("WE EXCLUDE CLASS:", exclude_class)
 
         for cat in self.categories:
-            # if cat.name not in exclude_class: 
             categories_map[cat.id] = cat.name
         return categories_map
 
@@ -79,7 +132,7 @@ class Coco(BaseModel):
 
         imageid2anns = defaultdict(list)
         exclude_class  = [lbl.lower() for lbl in exclude_class]
-        id2label = self.get_categoryid_to_namecat()
+        id2label = self.get_categoryid_to_namecat(exclude_class=exclude_class)
         print(id2label)
         
 
@@ -108,7 +161,7 @@ class Coco(BaseModel):
                         break
 
             if id2label[ann.category_id] in exclude_class:
-                print("[Class Filters]",id2label[ann.category_id], "Class Exclude")
+                # print("[Class Filters]",id2label[ann.category_id], "Class Exclude")
                 skip = True
             
             if skip:

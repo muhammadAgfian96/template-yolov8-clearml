@@ -10,7 +10,7 @@ from src.config import (
     args_val
 )
 
-def init_clearml():
+def init_clearml() -> Task:
     print("init clearml, Task.current_task=", Task.current_task())
     if Task.current_task() is None:
         Task.add_requirements("/workspace/requirements.txt")
@@ -23,7 +23,7 @@ def init_clearml():
 
         task.set_script(
             repository="https://github.com/muhammadAgfian96/template-yolov8-clearml.git",
-            # branch="public",
+            branch="feat/resuming-model",
             working_dir=".",
             entry_point="src/train.py",
         )

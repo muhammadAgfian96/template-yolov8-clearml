@@ -144,9 +144,11 @@ class CVATHTTPDownloaderV1(BaseDownloader):
 
             if response.status_code == 202 and first_exporting_progress:
                 first_exporting_progress = True
-                print('🍆', end='\r', flush=True)
-            else:
+                print('🍆', end='', flush=True)
                 self.print_task_status(response)
+            else:
+                print('🍆', end='', flush=True)
+
             
             response.raise_for_status()
             if response.status_code == 201:
@@ -168,10 +170,11 @@ class CVATHTTPDownloaderV1(BaseDownloader):
         """
         
         ls_path_dataset = []
-        for task_id in task_ids:
+        for index, task_id in enumerate(task_ids, start=1):
             print("Downloading task_id: ", task_id, " ...")
             task_info, project_info, file_name_zip = self.download(task_id, annotations_only=annotations_only)
             dataset_dir = self.extract_file(file_name_zip, project_info=project_info, task_info=task_info)
+            print(f"[{index}] ✅  DONE Download and Extract Dataset\n")
             # images_dir = f"{dataset_dir}/images"
             # annotations_dir = f"{dataset_dir}/annotations"
             ls_path_dataset.append(dataset_dir)
@@ -306,7 +309,7 @@ class CVATHTTPDownloaderV2(BaseDownloader):
 
             if response.status_code == 202 and first_exporting_progress:
                 first_exporting_progress = True
-                print('🍆', end='\r', flush=True)
+                print('🍆', end='', flush=True)
             else:
                 self.print_task_status(response)
             

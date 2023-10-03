@@ -179,6 +179,7 @@ class Coco2Yolo:
             with open(txt_file, 'a') as file:
                 for i in range(len(bboxes)):
                     try:
+                        # cls, box or segments
                         line = *(segments[i] if use_segments else bboxes[i]),  # cls, box or segments
                         file.write(('%g ' * len(line)).rstrip() % line + '\n')
                     except Exception as e:

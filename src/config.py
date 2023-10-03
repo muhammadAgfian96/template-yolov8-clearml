@@ -50,13 +50,19 @@ args_logging = {
 
 args_task = {
     "model_name": "yolov8n",
-    "model_latest_id": ""
+    "model_latest_id": "" # sawit
     # "pretrained": "(model_id)"
 }
 
 args_data = {
     "cvat": {
-        "task_ids_train": [48],
+        "task_ids_train": [
+            193, 191, 179, 192, 
+            184, 186, 196, 190, 
+            194, 182, 174, 208, 
+            259, 257, 263, 258, 
+            250, 275
+        ],
         "task_ids_test": [],
     },
     "label_studio": {
@@ -69,7 +75,7 @@ args_data = {
         "val_ratio": 0.2,
         "test_ratio": None,
     },
-    "class_exclude": None,
+    "class_exclude": "fruitlet, foreign_object",
     # "attributes_exclude": {"maturity_truth": "background"},
     "attributes_exclude": None,
     "area_segment_min": 0,
@@ -81,7 +87,7 @@ args_train = {
     "epochs": 1000,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
     "batch": 2,                # number of images per batch (-1 for AutoBatch)
-    "imgsz": 640,               # size of input images as integer or w,h
+    "imgsz": 512,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
     "cache": True,             # True/ram, disk or False. Use cache for data loading

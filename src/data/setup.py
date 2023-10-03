@@ -155,8 +155,8 @@ def creating_classes_txt(dataset_dir, label_names):
         for cls_name in label_names:
             file.write(cls_name + '\n')
 
-def setup_dataset(dataset_dir, label_names, train_ratio=0.8, valid_ratio=0.2, test_ratio=None, dataset_test=None):
-    
+def setup_dataset(dataset_dir, label_names, train_ratio=0.8, valid_ratio=0.2, test_ratio=None, dataset_test=None, class_exclude=[]):
+    label_names = [label_name for label_name in label_names if label_name not in class_exclude]
     creating_classes_txt(dataset_dir, label_names)
 
     split_folder_yolo(
