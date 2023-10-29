@@ -1,11 +1,13 @@
-from utils.clearml_utils import task_clearml
+import ultralytics
+from ultralytics import settings as settings_ultralytics
+settings_ultralytics["clearml"] = False
+
+from utils.clearml_utils import task_clearml as task
 import os
 
-import ultralytics
 from clearml import Task
 from rich import print
 from ultralytics import YOLO
-from ultralytics import settings as settings_ultralytics
 
 from src.data.setup import cleanup_cache
 from src.utils.clearml_utils import config_clearml
@@ -15,13 +17,12 @@ from src.yolov8.callbacks import callbacks
 from src.yolov8.data import DataHandler
 from src.yolov8.exporter import export_handler
 
-settings_ultralytics["clearml"] = False
 task = Task.current_task()
 args_task, args_data, args_augment, args_train, args_val, args_export = config_clearml()
 
 print("ultralytics: version", ultralytics.__version__)
 task.add_tags(f"yv8-{ultralytics.__version__}")
-task.execute_remotely()
+# task.execute_remotely()
 
 task_yolo = get_task_yolo_name(args_task["model_name"])
 if not args_train["resume"]:

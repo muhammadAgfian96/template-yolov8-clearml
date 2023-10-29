@@ -24,9 +24,11 @@ class DataHandler:
         source_type = set()
         for source, d in self.config.items():
             print(source, d)
-            if source == "params" or source == "class_exclude" or source == "attributes_exclude" or source == "area_segment_min":
+            # if source not in ["params", "class_exclude", "attributes_exclude", "area_segment_min", "timeout"]:
+            if source not in ["cvat", "label_studio", "s3"]:
                 print(f"avoid {source}")
                 continue
+
 
             for k, v in d.items():
                 if v is None or v == "" or v == []:
@@ -59,11 +61,11 @@ class DataHandler:
         if is_server1:
             print("CVAT Server V1")
             print("about_cvat", about_cvat1)
-            cvat_http = CVATHTTPDownloaderV1()
+            cvat_http = CVATHTTPDownloaderV1(self.config)
         elif is_server2:
             print("CVAT Server V2")
             print("about_cvat", about_cvat2)
-            cvat_http = CVATHTTPDownloaderV2()
+            cvat_http = CVATHTTPDownloaderV2(self.config)
         else:
             raise ValueError("CVAT Server not found")
             

@@ -20,7 +20,7 @@ args_export = {
     "format": {
         "torchscript": 1,  # TorchScript
         "onnx": 1,  # ONNX
-        "openvino": 0,  # OpenVINO
+        "openvino": 1,  # OpenVINO
         "engine": 0,  # TensorRT
         "coreml": 0,  # CoreML
         "saved_model": 0,  # TensorFlow SavedModel
@@ -49,7 +49,7 @@ args_logging = {
 }
 
 args_task = {
-    "model_name": "yolov8n",
+    "model_name": "yolov8n-seg",
     "model_latest_id": "" # sawit
     # "pretrained": "(model_id)"
 }
@@ -81,10 +81,10 @@ args_data = {
 
 args_train = {
     "augment": True,            
-    "epochs": 100,              # number of epochs to train for
+    "epochs": 3,              # number of epochs to train for
     "patience": 0,             # epochs to wait for no observable improvement for early stopping of training
-    "batch": 10,                # number of images per batch (-1 for AutoBatch)
-    "imgsz": 512,               # size of input images as integer or w,h
+    "batch": 1,                # number of images per batch (-1 for AutoBatch)
+    "imgsz": 640,               # size of input images as integer or w,h
     "save": True,               # save train checkpoints and predict results
     "save_period": -1,          # Save checkpoint every x epochs (disabled if < 1)
     "cache": True,             # True/ram, disk or False. Use cache for data loading

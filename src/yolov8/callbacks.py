@@ -1,16 +1,18 @@
 # Ultralytics YOLO 🚀, AGPL-3.0 license
 
 import re
-
+from ultralytics.engine.trainer import BaseTrainer
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-
+import os
+import yaml
 from ultralytics.utils import LOGGER, TESTS_RUNNING
 from ultralytics.utils.torch_utils import model_info_for_loggers
+from yaml.loader import SafeLoader
 
 try:
     import clearml
-    from clearml import Task
+    from clearml import Task, OutputModel
     from clearml.binding.frameworks.pytorch_bind import PatchPyTorchModelIO
     from clearml.binding.matplotlib_bind import PatchedMatplotlib
 
@@ -134,7 +136,7 @@ def on_val_end(validator):
         _log_debug_samples(sorted(validator.save_dir.glob('val*.jpg')), 'Validation')
 
 
-def on_train_end(trainer):
+def on_train_end(trainer:BaseTrainer):
     """Logs final model and its name on training completion."""
     task = Task.current_task()
     if task:
@@ -154,22 +156,6 @@ def on_train_end(trainer):
         # Report final metrics
         for k, v in trainer.validator.metrics.results_dict.items():
             task.get_logger().report_single_value(k, v)
-        # Log the final model
-        task.update_output_model(
-            name="pytorch-best",
-            model_path=str(trainer.best), 
-            model_name="pytorch-best", 
-            auto_delete_file=False
-        )
-        print(f"{str(trainer.best)}")
-        # print(f"{str(trainer.last)}")
-        task.update_output_model(
-            name="pytorch-last",
-            model_path=str(trainer.last), 
-            model_name="pytorch-last", 
-            auto_delete_file=False
-        )
-
 
 callbacks = {
     'on_pretrain_routine_start': on_pretrain_routine_start,
