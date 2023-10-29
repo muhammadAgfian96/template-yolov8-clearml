@@ -1,6 +1,4 @@
 from src.utils.clearml_utils import init_clearml
-task = init_clearml()
-
 import os
 import shutil
 from src.data.converter.coco2yolo import Coco2Yolo
