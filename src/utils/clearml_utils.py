@@ -32,7 +32,7 @@ def init_clearml() -> Task:
             docker_image="yolov8-custom:gpu-py3.10.11",
             docker_arguments=["-e PYTHONPATH=/workspace", "--gpus all", "--shm-size=24g"],
         )
-        tags = ['🏷️ v2.7', '🐞 debug']
+        tags = ['🏷️ v2.7.1', '🐞 debug']
         task.set_tags(tags)
     return Task.current_task()
 

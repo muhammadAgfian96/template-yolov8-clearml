@@ -184,7 +184,7 @@ class CVATHTTPDownloaderV1(BaseDownloader):
         return ls_path_dataset
 
 class CVATHTTPDownloaderV2(BaseDownloader):
-    def __init__(self. config_data):
+    def __init__(self, config_data):
         __URL_CVAT = env.CVAT_HOST
         __USERNAME_CVAT = env.CVAT_USERNAME
         __PASSWORD_CVAT = env.CVAT_PASSWORD
@@ -411,6 +411,6 @@ class CVATSDKDownloader(BaseDownloader):
         return ls_path_dataset
     
 
-if __name__ == '__main__':
-    CVATHTTPDownloaderV1()
-    CVATSDKDownloader()
+# if __name__ == '__main__':
+#     CVATHTTPDownloaderV1()
+#     CVATSDKDownloader()
