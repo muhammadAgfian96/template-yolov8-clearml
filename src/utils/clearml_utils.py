@@ -65,3 +65,5 @@ def config_clearml():
     args_data.update({"area_segment_min":args_data.get("area_segment_min", None)})
     
     return  args_task, args_data, args_augment, args_train, args_val, args_export
+
+init_clearml()
