@@ -14,12 +14,13 @@ import src.env as env
 
 
 class CVATHTTPDownloaderV1(BaseDownloader):
-    def __init__(self):
+    def __init__(self, config_data):
         __URL_CVAT = env.CVAT_HOST
         __USERNAME_CVAT = env.CVAT_USERNAME
         __PASSWORD_CVAT = env.CVAT_PASSWORD
         __OUTPUT_DIR_TMP = env.TMP_DIR_CVAT
         __FORMAT_DATA = os.getenv("CVAT_FORMAT_DATA")
+        self.config_data = config_data
 
         if __URL_CVAT is None or __USERNAME_CVAT is None or __PASSWORD_CVAT is None:
             raise Exception('CVAT_HOST, CVAT_USERNAME, CVAT_PASSWORD must be set')
@@ -159,11 +160,11 @@ class CVATHTTPDownloaderV1(BaseDownloader):
                 self.save_file(response, file_name_zip)
                 break
 
-            if time.time() - timeout_start > 1200:
+            if time.time() - timeout_start > self.config_data['timeout']:
                 print('Timeout Download DATA from CVAT')
                 break
-            if time.time() - timeout_start > 600:
-                print("Still downloading after 600 secs")
+            if time.time() - timeout_start > self.config_data['timeout']/2:
+                print(f"Still downloading after {self.config_data['timeout']/2} secs")
         return task_info, project_info, file_name_zip
     
     def get_local_dataset_coco(self, task_ids: List[int], annotations_only: bool = False):
@@ -183,13 +184,14 @@ class CVATHTTPDownloaderV1(BaseDownloader):
         return ls_path_dataset
 
 class CVATHTTPDownloaderV2(BaseDownloader):
-    def __init__(self):
+    def __init__(self. config_data):
         __URL_CVAT = env.CVAT_HOST
         __USERNAME_CVAT = env.CVAT_USERNAME
         __PASSWORD_CVAT = env.CVAT_PASSWORD
         __OUTPUT_DIR_TMP = env.TMP_DIR_CVAT
         __ORGANIZATION = env.CVAT_ORGANIZATION
         __FORMAT_DATA = env.CVAT_FORMAT_DATA
+        self.config_data=config_data
 
         if __URL_CVAT is None or __USERNAME_CVAT is None or __PASSWORD_CVAT is None:
             raise Exception('CVAT_HOST, CVAT_USERNAME, CVAT_PASSWORD must be set')
@@ -324,8 +326,11 @@ class CVATHTTPDownloaderV2(BaseDownloader):
                 self.save_file(response, file_name_zip)
                 break
 
-            if time.time() - timeout_start > 120:
+            if time.time() - timeout_start > self.config_data['timeout']:
                 print('Timeout Download DATA from CVAT')
+                break
+            if time.time() - timeout_start > self.config_data['timeout']/2:
+                print(f"Still downloading after {self.config_data['timeout']/2} secs")
                 break
         return task_info, project_info, file_name_zip
     

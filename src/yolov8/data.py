@@ -54,10 +54,8 @@ class DataHandler:
 
         # label_names = [label_name for label_name in label_names if label_name not in self.exclude_cls]
 
-
-        
-        is_server1, about_cvat1 = CVATHTTPDownloaderV1().get_about_server()
-        is_server2, about_cvat2 = CVATHTTPDownloaderV2().get_about_server()
+        is_server1, about_cvat1 = CVATHTTPDownloaderV1(self.config).get_about_server()
+        is_server2, about_cvat2 = CVATHTTPDownloaderV2(self.config).get_about_server()
         if is_server1:
             print("CVAT Server V1")
             print("about_cvat", about_cvat1)

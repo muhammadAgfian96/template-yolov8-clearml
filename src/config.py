@@ -75,6 +75,7 @@ args_data = {
     # "attributes_exclude": {"maturity_truth": "background"},
     "attributes_exclude": None,
     "area_segment_min": 0,
+    "timeout": 1400 # setengah jan
 }
 
 
