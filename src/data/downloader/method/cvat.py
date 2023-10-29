@@ -159,9 +159,11 @@ class CVATHTTPDownloaderV1(BaseDownloader):
                 self.save_file(response, file_name_zip)
                 break
 
-            if time.time() - timeout_start > 120:
+            if time.time() - timeout_start > 1200:
                 print('Timeout Download DATA from CVAT')
                 break
+            if time.time() - timeout_start > 600:
+                print("Still downloading after 600 secs")
         return task_info, project_info, file_name_zip
     
     def get_local_dataset_coco(self, task_ids: List[int], annotations_only: bool = False):

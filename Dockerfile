@@ -16,8 +16,9 @@ RUN apt install --no-install-recommends -y \
 WORKDIR /workspace
 
 # Install pip packages
-RUN pip install torch torchvision
 RUN pip install --upgrade pip wheel
+RUN pip install torch==2.0.1 
+RUN pip install torchvision==0.15.2
 COPY requirements.txt /deps/requirements.txt
 RUN pip install -r /deps/requirements.txt
 

@@ -1,4 +1,4 @@
-ultralytics==8.0.189
+ultralytics==8.0.202
 clearml[s3]==1.13.1
 pydantic<2.0.0
 # images
@@ -13,6 +13,8 @@ cvat-sdk==2.6.0
 roboflow==1.1.4
 gsutil==5.25
 requests==2.31.0
+plotly
+rich
 
 # utils
 rich==13.5.2
